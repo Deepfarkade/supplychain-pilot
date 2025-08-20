@@ -19,11 +19,13 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { AppHeader } from '@/components/AppHeader'
 import { Loading } from '@/components/Loading'
+import { useAuth } from '@/contexts/AuthContext'
 
 const Home = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     setMounted(true)
@@ -98,21 +100,21 @@ const Home = () => {
 
           {/* User Info */}
           <div className="px-4 py-2 border-b border-sidebar-border">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-sidebar-foreground/70" />
-                <span className="text-sm text-sidebar-foreground">Deep Farkade</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4 text-sidebar-foreground/70" />
+                  <span className="text-sm text-sidebar-foreground">{user?.name || 'User'}</span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 px-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+                  onClick={logout}
+                >
+                  <LogOut className="w-3 h-3 mr-1" />
+                  Logout
+                </Button>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 px-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
-                onClick={() => handleNavigation('')}
-              >
-                <LogOut className="w-3 h-3 mr-1" />
-                Logout
-              </Button>
-            </div>
           </div>
 
           {/* Navigation */}
