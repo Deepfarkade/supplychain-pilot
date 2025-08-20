@@ -56,12 +56,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Simulating API call for now
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock successful login
-      if (email && password) {
+      // Dummy credentials for testing
+      const validCredentials = [
+        { email: 'admin@supplychainai.com', password: 'admin123', name: 'Admin User' },
+        { email: 'user@supplychainai.com', password: 'user123', name: 'Supply Chain User' }
+      ];
+      
+      const validUser = validCredentials.find(
+        cred => cred.email === email && cred.password === password
+      );
+      
+      if (validUser) {
         const mockUser: User = {
-          id: '1',
-          email: email,
-          name: email.split('@')[0]
+          id: validUser.email === 'admin@supplychainai.com' ? '1' : '2',
+          email: validUser.email,
+          name: validUser.name
         };
         
         const mockToken = 'mock-jwt-token-' + Date.now();

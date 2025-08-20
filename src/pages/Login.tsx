@@ -76,7 +76,7 @@ const Login = () => {
           {/* Title */}
           <div className="text-center mb-12">
             <h1 className="text-6xl font-bold mb-4">
-              <span className="text-yellow-400">Generative</span>
+              <span className="text-yellow-400">Supply Chain</span>
               <span className="text-white">AI</span> 
               <span className="text-white/90 font-light"> Studio</span>
             </h1>
@@ -90,7 +90,7 @@ const Login = () => {
                 <div>
                   <Input
                     type="email"
-                    placeholder="deep.farkade@in.ey.com"
+                    placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -100,7 +100,7 @@ const Login = () => {
                 <div>
                   <Input
                     type="password"
-                    placeholder="••••••••••••"
+                    placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
