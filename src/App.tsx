@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Home from "./pages/Home";
 import AppStore from "./pages/AppStore";
 import NotFound from "./pages/NotFound";
+import { MicroserviceContainer } from "./components/MicroserviceContainer";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/appstore" element={<AppStore />} />
+            {/* Microservice Routes */}
+            <Route path="/app/:domain/:slug" element={<MicroserviceContainer />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

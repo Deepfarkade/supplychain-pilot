@@ -98,6 +98,7 @@ const appData = {
 }
 
 const AppStore = () => {
+  const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('general')
   const [isLoading, setIsLoading] = useState(false)
@@ -115,10 +116,11 @@ const AppStore = () => {
   const handleExplore = (domain: string, slug: string) => {
     setIsLoading(true)
     console.log(`Exploring ${domain}/${slug}`)
-    // Navigate to micro-frontend app
+    // Navigate to microservice using React Router (no page reload)
     setTimeout(() => {
-      window.location.href = `/app/${domain}/${slug}`
-    }, 300)
+      navigate(`/app/${domain}/${slug}`)
+      setIsLoading(false)
+    }, 500)
   }
 
   const handleTabChange = (value: string) => {
