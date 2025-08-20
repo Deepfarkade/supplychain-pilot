@@ -10,7 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { ThemeToggle } from './ThemeToggle'
-import { ChevronDown, Bell, HelpCircle, Grid3X3, Settings } from 'lucide-react'
+import { ChevronDown, Bell, HelpCircle, Grid3X3, Settings, Home } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const apps = [
   'Conversational Agents',
@@ -39,12 +40,14 @@ const agentConfigs = [
 ]
 
 export function AppHeader() {
+  const navigate = useNavigate()
+  
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         {/* Left Side */}
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
             <div className="h-8 w-8 rounded bg-accent flex items-center justify-center">
               <span className="text-accent-foreground font-bold text-sm">SA</span>
             </div>
@@ -52,11 +55,20 @@ export function AppHeader() {
           </div>
           
           <nav className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              className="gap-2"
+              onClick={() => navigate('/')}
+            >
+              <Home className="h-4 w-4" />
+              Home
+            </Button>
+            
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="gap-2">
+                <Button variant="ghost" className="gap-2" onClick={() => navigate('/appstore')}>
                   <Grid3X3 className="h-4 w-4" />
-                  Apps
+                  App Store
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
