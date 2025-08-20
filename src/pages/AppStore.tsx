@@ -6,8 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AppCard } from '@/components/AppCard';
-import { RightRail } from '@/components/RightRail';
 import { AppHeader } from '@/components/AppHeader';
+import { Loading } from '@/components/Loading';
 
 // Import generated images
 import conversationalAgentsImg from '@/assets/conversational-agents.jpg'
@@ -100,6 +100,7 @@ const appData = {
 const AppStore = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('general')
+  const [isLoading, setIsLoading] = useState(false)
 
   // Filter apps based on search query
   const filteredApps = useMemo(() => {
@@ -112,9 +113,20 @@ const AppStore = () => {
   }, [searchQuery, activeTab])
 
   const handleExplore = (domain: string, slug: string) => {
+    setIsLoading(true)
     console.log(`Exploring ${domain}/${slug}`)
     // Navigate to micro-frontend app
-    window.location.href = `/app/${domain}/${slug}`
+    setTimeout(() => {
+      window.location.href = `/app/${domain}/${slug}`
+    }, 300)
+  }
+
+  const handleTabChange = (value: string) => {
+    setIsLoading(true)
+    setTimeout(() => {
+      setActiveTab(value)
+      setIsLoading(false)
+    }, 200)
   }
 
   return (
@@ -127,9 +139,9 @@ const AppStore = () => {
         <div className="absolute inset-0 network-pattern" />
         <div className="absolute inset-0 dotted-pattern opacity-30" />
         
-        <div className="relative z-10 container mx-auto px-4 py-16">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold text-foreground mb-4">
+        <div className="relative z-10 container mx-auto px-4 py-8">
+          <div className="text-center max-w-3xl mx-auto animate-fade-in">
+            <h1 className="text-4xl font-bold text-foreground mb-3">
               Application Store
             </h1>
             <p className="text-lg text-muted-foreground">
@@ -140,106 +152,127 @@ const AppStore = () => {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex gap-8">
-          {/* Main Content Area */}
-          <div className="flex-1">
-            {/* Search */}
-            <div className="relative mb-8">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                placeholder="Search Applications"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 text-base"
-              />
+      <div className="container mx-auto px-4 py-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Search */}
+          <div className="relative mb-6 animate-fade-in">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Input
+              placeholder="Search Applications"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-12 text-base transition-all duration-200 hover:shadow-sm focus:shadow-md"
+            />
+          </div>
+
+          {/* Loading Overlay */}
+          {isLoading && (
+            <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+              <Loading className="scale-150" />
             </div>
+          )}
 
-            {/* Domain Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-              <TabsList className="grid w-full grid-cols-3 h-12">
-                <TabsTrigger value="general" className="text-sm font-medium">
-                  General
-                  <Badge variant="secondary" className="ml-2">
-                    {appData.general.length}
-                  </Badge>
-                </TabsTrigger>
-                <TabsTrigger value="supply-chain" className="text-sm font-medium">
-                  Supply Chain
-                  <Badge variant="secondary" className="ml-2">
-                    {appData['supply-chain'].length}
-                  </Badge>
-                </TabsTrigger>
-                <TabsTrigger value="pharma" className="text-sm font-medium">
-                  Pharma
-                  <Badge variant="secondary" className="ml-2">
-                    {appData.pharma.length}
-                  </Badge>
-                </TabsTrigger>
-              </TabsList>
+          {/* Domain Tabs */}
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 h-12 animate-fade-in">
+              <TabsTrigger value="general" className="text-sm font-medium transition-all duration-200">
+                General
+                <Badge variant="secondary" className="ml-2">
+                  {appData.general.length}
+                </Badge>
+              </TabsTrigger>
+              <TabsTrigger value="supply-chain" className="text-sm font-medium transition-all duration-200">
+                Supply Chain
+                <Badge variant="secondary" className="ml-2">
+                  {appData['supply-chain'].length}
+                </Badge>
+              </TabsTrigger>
+              <TabsTrigger value="pharma" className="text-sm font-medium transition-all duration-200">
+                Pharma
+                <Badge variant="secondary" className="ml-2">
+                  {appData.pharma.length}
+                </Badge>
+              </TabsTrigger>
+            </TabsList>
 
-              {/* App Cards Grid */}
-              <TabsContent value="general" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up">
-                  {filteredApps.map((app) => (
-                    <AppCard
+            {/* App Cards Grid */}
+            <div className="min-h-[400px]">
+              <TabsContent value="general" className="mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-in">
+                  {filteredApps.map((app, index) => (
+                    <div
                       key={`${app.domain}-${app.slug}`}
-                      title={app.title}
-                      description={app.description}
-                      imageUrl={app.imageUrl}
-                      domain={app.domain}
-                      slug={app.slug}
-                      onExplore={handleExplore}
-                    />
+                      className="animate-slide-up"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <AppCard
+                        title={app.title}
+                        description={app.description}
+                        imageUrl={app.imageUrl}
+                        domain={app.domain}
+                        slug={app.slug}
+                        onExplore={handleExplore}
+                      />
+                    </div>
                   ))}
                 </div>
               </TabsContent>
 
-              <TabsContent value="supply-chain" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up">
-                  {filteredApps.map((app) => (
-                    <AppCard
+              <TabsContent value="supply-chain" className="mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-in">
+                  {filteredApps.map((app, index) => (
+                    <div
                       key={`${app.domain}-${app.slug}`}
-                      title={app.title}
-                      description={app.description}
-                      imageUrl={app.imageUrl}
-                      domain={app.domain}
-                      slug={app.slug}
-                      onExplore={handleExplore}
-                    />
+                      className="animate-slide-up"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <AppCard
+                        title={app.title}
+                        description={app.description}
+                        imageUrl={app.imageUrl}
+                        domain={app.domain}
+                        slug={app.slug}
+                        onExplore={handleExplore}
+                      />
+                    </div>
                   ))}
                 </div>
               </TabsContent>
 
-              <TabsContent value="pharma" className="mt-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up">
-                  {filteredApps.map((app) => (
-                    <AppCard
+              <TabsContent value="pharma" className="mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-in">
+                  {filteredApps.map((app, index) => (
+                    <div
                       key={`${app.domain}-${app.slug}`}
-                      title={app.title}
-                      description={app.description}
-                      imageUrl={app.imageUrl}
-                      domain={app.domain}
-                      slug={app.slug}
-                      onExplore={handleExplore}
-                    />
+                      className="animate-slide-up"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <AppCard
+                        title={app.title}
+                        description={app.description}
+                        imageUrl={app.imageUrl}
+                        domain={app.domain}
+                        slug={app.slug}
+                        onExplore={handleExplore}
+                      />
+                    </div>
                   ))}
                 </div>
               </TabsContent>
-            </Tabs>
+            </div>
 
             {/* No Results */}
             {filteredApps.length === 0 && searchQuery && (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">
+              <div className="text-center py-16 animate-fade-in">
+                <div className="text-muted-foreground text-lg">
                   No applications found matching "{searchQuery}"
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Try adjusting your search terms or browse different categories
                 </p>
               </div>
             )}
-          </div>
-
-          {/* Right Rail */}
-          <RightRail />
+          </Tabs>
         </div>
       </div>
     </div>
