@@ -174,7 +174,7 @@ const AppStore = () => {
 
           {/* Domain Tabs */}
           <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 h-12 animate-fade-in">
+            <TabsList className="grid w-full grid-cols-3 h-12 animate-fade-in">
               <TabsTrigger value="general" className="text-sm font-medium transition-all duration-200">
                 General
                 <Badge variant="secondary" className="ml-2">
