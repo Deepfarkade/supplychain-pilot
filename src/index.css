@@ -6,96 +6,62 @@
 
 @layer base {
   :root {
-    /* Base Colors - Light Mode */
-    --bg-light: 248 250 252; /* #F8FAFC */
-    --card-light: 255 255 255; /* #FFFFFF */
-    --text-light: 15 23 42; /* #0F172A */
-    
-    /* Base Colors - Dark Mode */
-    --bg-dark: 11 14 20; /* #0B0E14 */
-    --card-dark: 17 24 39; /* #111827 */
-    --text-dark: 229 231 235; /* #E5E7EB */
-    
-    /* Accent & Semantic Colors */
-    --accent: 234 179 8; /* #eab308 - Proper amber */
-    --accent-hover: 217 119 6; /* #d97706 - Darker amber */
-    --accent-foreground: 255 255 255;
-    
-    /* Borders & Surfaces */
-    --border-subtle: 148 163 184 / 0.24; /* rgba(148,163,184,0.24) */
-    --border-primary: 148 163 184 / 0.4;
-    --surface-hover: 148 163 184 / 0.1;
-    
-    /* Shadows & Effects */
-    --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-elevation: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-glow: 0 0 0 3px hsl(var(--accent) / 0.1);
-    
-    /* Animation Presets */
-    --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    
-    /* Light Mode Tokens */
-    --background: 248 250 252; /* #f8fafc */
-    --foreground: 15 23 42; /* #0f172a */
-    --card: 255 255 255; /* #ffffff */  
-    --card-foreground: 15 23 42; /* #0f172a */
-    --popover: 255 255 255; /* #ffffff */
-    --popover-foreground: 15 23 42; /* #0f172a */
-    --primary: 234 179 8; /* #eab308 */
-    --primary-foreground: 255 255 255; /* #ffffff */
-    --secondary: 241 245 249; /* #f1f5f9 */
-    --secondary-foreground: 15 23 42; /* #0f172a */
-    --muted: 248 250 252; /* #f8fafc */
-    --muted-foreground: 100 116 139; /* #64748b */
-    --border: 226 232 240; /* #e2e8f0 */
-    --input: 226 232 240; /* #e2e8f0 */
-    --ring: 234 179 8; /* #eab308 */
+    /* Light Mode Tokens - All HSL Values */
+    --background: 210 20% 98%; /* Clean white background */
+    --foreground: 222.2 84% 4.9%; /* Dark text */
+    --card: 0 0% 100%; /* Pure white cards */
+    --card-foreground: 222.2 84% 4.9%; /* Dark text on cards */
+    --popover: 0 0% 100%; /* White popover */
+    --popover-foreground: 222.2 84% 4.9%; /* Dark text in popover */
+    --primary: 47.9 95.8% 53.1%; /* Clean yellow/amber primary */
+    --primary-foreground: 26 83.3% 14.1%; /* Dark text on primary */
+    --secondary: 210 40% 96%; /* Light gray secondary */
+    --secondary-foreground: 222.2 84% 4.9%; /* Dark text on secondary */
+    --muted: 210 40% 96%; /* Light muted background */
+    --muted-foreground: 215.4 16.3% 46.9%; /* Muted text */
+    --border: 214.3 31.8% 91.4%; /* Light border */
+    --input: 214.3 31.8% 91.4%; /* Input border */
+    --ring: 47.9 95.8% 53.1%; /* Focus ring same as primary */
     --radius: 12px;
 
+    /* Sidebar specific colors */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
+    --sidebar-primary: 47.9 95.8% 53.1%; /* Yellow for active items */
+    --sidebar-primary-foreground: 26 83.3% 14.1%;
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 47.9 95.8% 53.1%;
   }
 
   .dark {
-    /* Dark Mode Tokens */
-    --background: 11 14 20; /* #0b0e14 */
-    --foreground: 229 231 235; /* #e5e7eb */
-    --card: 17 24 39; /* #111827 */
-    --card-foreground: 229 231 235; /* #e5e7eb */
-    --popover: 17 24 39; /* #111827 */
-    --popover-foreground: 229 231 235; /* #e5e7eb */
-    --primary: 234 179 8; /* #eab308 */
-    --primary-foreground: 255 255 255; /* #ffffff */
-    --secondary: 30 41 59; /* #1e293b */
-    --secondary-foreground: 229 231 235; /* #e5e7eb */
-    --muted: 15 23 42; /* #0f172a */
-    --muted-foreground: 148 163 184; /* #94a3b8 */
-    --border: 30 41 59; /* #1e293b */
-    --input: 30 41 59; /* #1e293b */
-    --ring: 234 179 8; /* #eab308 */
-    
-    --sidebar-background: var(--bg-dark);
-    --sidebar-foreground: var(--text-dark);
-    --sidebar-primary: var(--accent);
-    --sidebar-primary-foreground: var(--accent-foreground);
-    --sidebar-accent: 30 41 59;
-    --sidebar-accent-foreground: var(--text-dark);
-    --sidebar-border: var(--border-primary);
-    --sidebar-ring: var(--accent);
+    /* Dark Mode Tokens - All HSL Values */
+    --background: 222.2 84% 4.9%; /* Dark background */
+    --foreground: 210 40% 98%; /* Light text */
+    --card: 222.2 84% 4.9%; /* Dark card background */
+    --card-foreground: 210 40% 98%; /* Light text on cards */
+    --popover: 222.2 84% 4.9%; /* Dark popover */
+    --popover-foreground: 210 40% 98%; /* Light text in popover */
+    --primary: 47.9 95.8% 53.1%; /* Same yellow/amber primary */
+    --primary-foreground: 26 83.3% 14.1%; /* Dark text on primary */
+    --secondary: 217.2 32.6% 17.5%; /* Dark secondary */
+    --secondary-foreground: 210 40% 98%; /* Light text on secondary */
+    --muted: 217.2 32.6% 17.5%; /* Dark muted background */
+    --muted-foreground: 215 20.2% 65.1%; /* Muted text */
+    --border: 217.2 32.6% 17.5%; /* Dark border */
+    --input: 217.2 32.6% 17.5%; /* Input border */
+    --ring: 47.9 95.8% 53.1%; /* Focus ring same as primary */
+
+    /* Sidebar specific colors for dark mode */
+    --sidebar-background: 222.2 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 47.9 95.8% 53.1%; /* Yellow for active items */
+    --sidebar-primary-foreground: 26 83.3% 14.1%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-ring: 47.9 95.8% 53.1%;
   }
 }
 
@@ -135,11 +101,17 @@
     animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  /* Globe Background Decoration */
-  .globe-decoration {
+  /* Network/Globe Background Pattern */
+  .network-pattern {
     background-image: 
-      radial-gradient(circle at 20% 80%, hsl(var(--accent) / 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, hsl(var(--border-subtle)) 0%, transparent 50%);
+      radial-gradient(circle at 20% 50%, hsl(var(--primary) / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(var(--primary) / 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, hsl(var(--primary) / 0.02) 0%, transparent 50%);
+  }
+  
+  .dotted-pattern {
+    background-image: radial-gradient(circle, hsl(var(--muted-foreground) / 0.15) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }
 
