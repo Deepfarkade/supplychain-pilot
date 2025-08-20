@@ -46,9 +46,9 @@ export function AppHeader() {
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded bg-accent flex items-center justify-center">
-              <span className="text-accent-foreground font-bold text-sm">SC</span>
+              <span className="text-accent-foreground font-bold text-sm">SA</span>
             </div>
-            <span className="font-semibold text-lg">GenerativeAI Studio</span>
+            <span className="font-semibold text-lg">SupplyAI Studio</span>
           </div>
           
           <nav className="flex items-center gap-4">

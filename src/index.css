@@ -17,9 +17,9 @@
     --text-dark: 229 231 235; /* #E5E7EB */
     
     /* Accent & Semantic Colors */
-    --accent: 44 71 64; /* #E8C152 - Muted amber */
-    --accent-hover: 41 67 59; /* Slightly darker */
-    --accent-foreground: 11 14 20;
+    --accent: 47 84 82; /* #E8C152 - Muted amber */
+    --accent-hover: 45 77 75; /* Slightly darker */
+    --accent-foreground: 15 23 42;
     
     /* Borders & Surfaces */
     --border-subtle: 148 163 184 / 0.24; /* rgba(148,163,184,0.24) */

@@ -133,7 +133,7 @@ const Index = () => {
         <div className="container relative py-16 sm:py-20">
           <div className="text-center max-w-4xl mx-auto animate-fade-in">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-              GenerativeAI Studio —{' '}
+              SupplyAI Studio —{' '}
               <span className="text-accent">Supply Chain Co-Pilot</span>
             </h1>
             <p className="text-xl sm:text-2xl text-muted-foreground mb-8">
