@@ -1,10 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-}
+import { authService } from '@/security/auth';
+import type { User } from '@/security/types';
+import SessionTimeoutModal from '@/components/SessionTimeoutModal';
 
 interface AuthContextType {
   user: User | null;
@@ -12,6 +9,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  extendSession: () => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,91 +29,95 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+  const [timeoutSeconds, setTimeoutSeconds] = useState(120);
 
   useEffect(() => {
-    // Check for existing session on app load
-    const token = localStorage.getItem('auth_token');
-    const userData = localStorage.getItem('user_data');
-    
-    if (token && userData) {
+    // Restore session on app load
+    const restoreSession = async () => {
       try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
+        const { user: restoredUser, isValid } = await authService.restoreSession();
+        
+        if (isValid && restoredUser) {
+          setUser(restoredUser);
+          
+          // Start session management
+          authService.startUserSession(
+            restoredUser,
+            handleSessionTimeout,
+            handleSessionWarning
+          );
+          
+          console.log('✅ Session restored for:', restoredUser.name);
+        } else {
+          console.log('❌ No valid session found');
+        }
       } catch (error) {
-        // Invalid stored data, clear it
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('user_data');
+        console.error('Session restoration error:', error);
+      } finally {
+        setIsLoading(false);
       }
-    }
-    setIsLoading(false);
+    };
+
+    restoreSession();
   }, []);
+
+  const handleSessionTimeout = () => {
+    console.log('🔐 Session timed out, logging out user');
+    setUser(null);
+    setShowTimeoutModal(false);
+  };
+
+  const handleSessionWarning = (remainingSeconds: number) => {
+    console.log('⚠️ Session warning:', remainingSeconds, 'seconds remaining');
+    setTimeoutSeconds(remainingSeconds);
+    setShowTimeoutModal(true);
+  };
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      // TODO: Replace with actual Azure/MongoDB API call
-      // For now, try MongoDB service first, fallback to dummy credentials
+      setIsLoading(true);
       
-      // Import MongoDB service dynamically to avoid circular dependencies
-      const { mongoService } = await import('@/services/database/mongodb');
+      const response = await authService.authenticate({ email, password });
       
-      try {
-        const authenticatedUser = await mongoService.authenticateUser(email, password);
-        if (authenticatedUser) {
-          const user: User = {
-            id: authenticatedUser._id || '1',
-            email: authenticatedUser.email,
-            name: authenticatedUser.name
-          };
-          
-          const token = 'jwt-token-' + Date.now();
-          
-          setUser(user);
-          localStorage.setItem('auth_token', token);
-          localStorage.setItem('user_data', JSON.stringify(user));
-          
-          return true;
-        }
-      } catch (mongoError) {
-        console.log('MongoDB auth failed, falling back to dummy credentials');
-      }
-      
-      // Fallback to dummy credentials for development
-      const validCredentials = [
-        { email: 'admin@supplychainai.com', password: 'admin123', name: 'Admin User' },
-        { email: 'user@supplychainai.com', password: 'user123', name: 'Supply Chain User' }
-      ];
-      
-      const validUser = validCredentials.find(
-        cred => cred.email === email && cred.password === password
-      );
-      
-      if (validUser) {
-        const mockUser: User = {
-          id: validUser.email === 'admin@supplychainai.com' ? '1' : '2',
-          email: validUser.email,
-          name: validUser.name
-        };
+      if (response.success && response.user) {
+        setUser(response.user);
         
-        const mockToken = 'mock-jwt-token-' + Date.now();
+        // Start session management with timeout callbacks
+        authService.startUserSession(
+          response.user,
+          handleSessionTimeout,
+          handleSessionWarning
+        );
         
-        setUser(mockUser);
-        localStorage.setItem('auth_token', mockToken);
-        localStorage.setItem('user_data', JSON.stringify(mockUser));
-        
+        console.log('✅ Login successful for:', response.user.name);
         return true;
       }
       
+      console.log('❌ Login failed:', response.message);
       return false;
     } catch (error) {
       console.error('Login error:', error);
       return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const logout = () => {
+    authService.logout();
     setUser(null);
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_data');
+    setShowTimeoutModal(false);
+    console.log('👋 User logged out');
+  };
+
+  const extendSession = (): boolean => {
+    const extended = authService.extendSession();
+    if (extended) {
+      setShowTimeoutModal(false);
+      console.log('🔄 Session extended successfully');
+    }
+    return extended;
   };
 
   const value: AuthContextType = {
@@ -123,12 +125,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isAuthenticated: !!user,
     isLoading,
     login,
-    logout
+    logout,
+    extendSession
   };
 
   return (
     <AuthContext.Provider value={value}>
       {children}
+      <SessionTimeoutModal
+        isOpen={showTimeoutModal}
+        remainingSeconds={timeoutSeconds}
+        onExtendSession={extendSession}
+        onLogout={logout}
+      />
     </AuthContext.Provider>
   );
 };

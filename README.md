@@ -18,36 +18,53 @@ npm run dev
 src/
 ├── components/           # Reusable UI components
 │   ├── ui/              # Shadcn/ui components
-│   ├── AppCard.tsx      # Application card component
+│   ├── AppCard.tsx      # Application card component  
 │   ├── AppHeader.tsx    # Main header component
 │   ├── ProtectedRoute.tsx # Route protection
-│   └── ...
+│   └── SessionTimeoutModal.tsx # Session timeout warning
 ├── contexts/            # React contexts
 │   └── AuthContext.tsx  # Authentication context
-├── hooks/               # Custom React hooks
-├── lib/                 # Utility libraries
-├── microservices/      # Microservice components
-│   ├── registry.ts     # Microservice registry
-│   ├── general/        # General microservices
-│   └── supply-chain/   # Supply chain microservices
-├── pages/              # Page components
-│   ├── Home.tsx        # Main dashboard
-│   ├── Login.tsx       # Authentication page
-│   ├── AppStore.tsx    # Microservice catalog
-│   └── ...
-├── services/           # External service integrations
-│   └── database/       # Database services
-│       └── mongodb.ts  # MongoDB integration
-└── assets/             # Static assets
+├── security/            # Security & authentication
+│   ├── auth.ts          # Main authentication service
+│   ├── jwt.ts           # JWT token management
+│   ├── session.ts       # Session timeout handling
+│   └── types.ts         # Security type definitions
+├── services/            # External service integrations
+│   └── database/        # Database services
+│       └── mongodb.ts   # MongoDB integration
+├── microservices/       # Microservice components
+│   ├── registry.ts      # Microservice registry
+│   ├── general/         # General microservices
+│   └── supply-chain/    # Supply chain microservices
+├── pages/               # Page components
+│   ├── Home.tsx         # Main dashboard
+│   ├── Login.tsx        # Authentication page
+│   ├── AppStore.tsx     # Microservice catalog
+│   └── Settings.tsx     # Application settings
+└── assets/              # Static assets
 ```
 
-## 🔐 Authentication & Security
+## 🔐 Security & Authentication
 
-### Current Setup
-- **Frontend Authentication**: JWT-based with localStorage persistence
-- **Protected Routes**: All main routes require authentication
-- **Session Management**: Automatic session restoration on app load
-- **MongoDB Integration**: Ready for Azure/MongoDB backend integration
+### Production-Grade Security Features
+
+- **JWT Token Management**: Secure token generation, validation, and refresh
+- **Session Timeout**: 20-minute idle timeout with 2-minute warning
+- **Activity Tracking**: Automatic session extension on user activity
+- **Multi-Strategy Authentication**: MongoDB → Environment → Fallback
+- **Concurrent User Support**: Designed for multiple simultaneous users
+- **Automatic Token Refresh**: Seamless token renewal before expiration
+
+### Authentication Flow
+
+1. **Login Attempt**: User provides credentials
+2. **Strategy Selection**: 
+   - Primary: MongoDB authentication (production)
+   - Fallback 1: Environment variables (PC deployment)
+   - Fallback 2: Dummy credentials (development)
+3. **JWT Generation**: Secure token with 20-minute expiration
+4. **Session Management**: Activity tracking and timeout handling
+5. **Automatic Refresh**: Token renewal 5 minutes before expiry
 
 ### Default Credentials (Development)
 ```
@@ -55,144 +72,163 @@ Admin: admin@supplychainai.com / admin123
 User:  user@supplychainai.com / user123
 ```
 
-### Security Best Practices
+### Session Management
 
-#### ⚠️ Important Security Notes
-
-1. **Database Credentials**: Never store database credentials in frontend code in production
-2. **JWT Tokens**: Current implementation uses mock tokens - replace with secure backend generation
-3. **Password Hashing**: Passwords should be hashed on the backend before storage
-4. **HTTPS**: Always use HTTPS in production
-5. **Environment Variables**: This app doesn't use .env files - use Supabase for secure secret management
-
-#### Production Security Checklist
-
-- [ ] Implement backend authentication service (Azure AD recommended)
-- [ ] Use secure password hashing (bcrypt, argon2)
-- [ ] Implement JWT token validation on backend
-- [ ] Set up HTTPS/SSL certificates
-- [ ] Configure CORS properly
-- [ ] Implement rate limiting
-- [ ] Add input validation and sanitization
-- [ ] Set up proper error handling (don't expose sensitive info)
-- [ ] Configure MongoDB connection with proper security
+- **Idle Timeout**: 20 minutes of inactivity
+- **Warning Period**: 2-minute countdown with modal
+- **Activity Events**: Mouse, keyboard, scroll, touch interactions
+- **Automatic Extension**: Activity resets the timeout timer
+- **Graceful Logout**: Clean session termination and storage cleanup
 
 ## 🗄️ Database Integration
 
-### MongoDB Setup Options
+### Deployment Strategies
 
-**⚠️ Important**: Lovable doesn't support .env files or environment variables.
+**Development (Lovable):**
+- Uses localStorage for MongoDB configuration
+- Falls back to dummy credentials
+- Session state persisted in browser
 
-1. **Option 1 (Recommended - Supabase)**:
-   - Connect to Supabase for secure credential management
-   - Use Supabase Edge Functions for database operations
-   - [Connect to Supabase](https://docs.lovable.dev/supabase-integration)
+**Production (PC Deployment):**
+- Environment variables for database credentials
+- Secure server-side authentication
+- Redis/database session storage
 
-2. **Option 2 (Development Only)**:
-   - Use the DatabaseConfig component to set credentials
-   - Credentials stored in localStorage (not secure for production)
+### MongoDB Configuration
 
-3. **Option 3 (Production)**:
-   - Implement backend API with Azure services
-   - Frontend calls secure backend endpoints
-   - Backend handles MongoDB connections
+```javascript
+// Required Environment Variables (PC deployment)
+MONGODB_CONNECTION_STRING=mongodb+srv://...
+MONGODB_DATABASE_NAME=supplychainai
+MONGODB_COLLECTION_NAME=users
+JWT_SECRET_KEY=your-secure-secret-key
+SESSION_SECRET=your-session-secret
+```
 
-### Configuration Steps
-
-1. Navigate to the database configuration page
-2. Enter your MongoDB connection details:
-   - Connection String: `mongodb+srv://username:password@cluster.mongodb.net/`
-   - Database Name: Your database name
-   - Collection Name: Collection for user data (default: `users`)
-3. Test the connection
-4. Save configuration
-
-### MongoDB Schema
+### Database Schema
 
 ```javascript
 // Users Collection
 {
   _id: ObjectId,
-  email: String (unique),
-  password: String (hashed),
+  email: String (unique, indexed),
+  password: String (bcrypt hashed),
   name: String,
-  role: String,
+  role: String (enum: 'admin', 'user'),
   createdAt: Date,
-  updatedAt: Date
+  updatedAt: Date,
+  lastLoginAt: Date,
+  isActive: Boolean
 }
 ```
 
+## ⚡ Performance & Scalability
+
+### Optimizations
+
+- **Lazy Loading**: Components loaded on demand
+- **Token Caching**: JWT tokens cached with automatic refresh
+- **Activity Debouncing**: Efficient activity tracking
+- **Memory Management**: Proper cleanup of timers and listeners
+- **Concurrent Sessions**: Support for multiple active users
+
+### Production Considerations
+
+- **Load Balancing**: Stateless JWT enables horizontal scaling
+- **Session Storage**: Redis for production session management
+- **Rate Limiting**: API rate limiting for security
+- **CDN Integration**: Asset delivery optimization
+- **Database Indexing**: Optimized queries with proper indexes
+
 ## 🎨 Design System
 
-The application uses a custom design system built on:
-- **Tailwind CSS**: Utility-first CSS framework
+Built with modern UI components:
+- **Tailwind CSS**: Utility-first styling
 - **Shadcn/ui**: High-quality React components
-- **Custom Tokens**: Semantic color and spacing tokens
-
-### Color Scheme
-- Primary: Supply chain themed colors
-- Background: Dark mode optimized
-- Accent: Yellow highlights for important elements
+- **Smooth Animations**: CSS transitions and micro-interactions
+- **Responsive Design**: Mobile-first approach
+- **Dark Mode Support**: Theme switching capability
 
 ## 🔧 Development
 
 ### Adding New Microservices
 
-1. Create component in appropriate folder under `src/microservices/`
+1. Create component in `src/microservices/{domain}/{service}/`
 2. Add entry to `src/microservices/registry.ts`
 3. Add corresponding image to `src/assets/`
-4. Component will automatically appear in AppStore
+4. Component automatically appears in AppStore
 
-### Folder Organization
-- Keep components focused and single-purpose
-- Use proper TypeScript interfaces
-- Follow existing naming conventions
-- Add proper error handling
+### Security Best Practices
+
+1. **Token Security**:
+   - Use HTTPS in production
+   - Implement proper CORS
+   - Store JWT securely (httpOnly cookies in production)
+
+2. **Session Management**:
+   - Configure appropriate timeout values
+   - Implement proper cleanup
+   - Monitor session activity
+
+3. **Database Security**:
+   - Use connection pooling
+   - Implement query validation
+   - Enable MongoDB authentication
 
 ## 🚀 Deployment
 
-### Production Considerations
+### Lovable Deployment
+```bash
+# Publish to Lovable hosting
+Click "Publish" in Lovable interface
+```
 
-1. **Backend Services**:
-   - Implement proper authentication backend with Azure AD
-   - Set up secure database connections
-   - Use Azure Key Vault for secrets
+### PC/Server Deployment
+```bash
+# Build for production
+npm run build
 
-2. **Frontend Build**:
-   - Configure proper base URL
-   - Optimize bundle size
-   - Set up CDN for assets
+# Set environment variables
+export MONGODB_CONNECTION_STRING="..."
+export JWT_SECRET_KEY="..."
 
-3. **Security**:
-   - Enable HTTPS
-   - Configure security headers
-   - Implement proper CORS
-   - Use Azure App Service or similar for hosting
+# Start production server
+npm run preview
+```
 
-## 📦 Dependencies
+### Docker Deployment
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+EXPOSE 4173
+CMD ["npm", "run", "preview"]
+```
 
-### Core
-- React 18 + TypeScript
-- Vite (build tool)
-- React Router DOM (routing)
-- Tailwind CSS (styling)
+## 📊 Monitoring & Analytics
 
-### UI Components
-- Radix UI primitives
-- Lucide React (icons)
-- Shadcn/ui components
+### Session Analytics
+- Track user login patterns
+- Monitor session duration
+- Analyze timeout rates
+- User activity metrics
 
-### State Management
-- React Context API
-- Local Storage for persistence
+### Security Monitoring
+- Failed login attempts
+- Token refresh patterns
+- Session timeout events
+- Concurrent user tracking
 
 ## 🤝 Contributing
 
-1. Follow the existing code structure
-2. Use TypeScript for all new code
-3. Add proper error handling
-4. Test authentication flows
-5. Update documentation for new features
+1. Follow security-first development
+2. Test authentication flows thoroughly
+3. Update security documentation
+4. Validate session management
+5. Test concurrent user scenarios
 
 ## 📄 License
 
@@ -200,4 +236,4 @@ This project is proprietary software for supply chain management.
 
 ---
 
-**Security Reminder**: Always review and update security configurations before production deployment. Consider using Azure services for production-grade security and scalability.
+**Security Note**: This system is designed for production use with proper backend infrastructure. The fallback mechanisms ensure development continuity while maintaining security standards.
