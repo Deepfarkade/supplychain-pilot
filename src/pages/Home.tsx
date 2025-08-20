@@ -1,10 +1,9 @@
 import React from 'react'
 import { AppHeader } from '@/components/AppHeader'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Bot, Workflow, MessageSquare, TrendingUp, Shield, Zap } from 'lucide-react'
+import { ArrowRight, Bot, Workflow, Brain, Network, Shield, Zap, MessageSquare, TrendingUp } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
@@ -12,150 +11,174 @@ const Home = () => {
 
   const features = [
     {
-      icon: Bot,
-      title: "AI-Powered Agents",
-      description: "Intelligent conversational agents that understand supply chain complexities"
+      icon: MessageSquare,
+      title: "Chatbots",
+      description: "AI-powered tools that can help humans (knowledge management, QA, Assisted Transaction).",
+      image: "/api/placeholder/400/200"
     },
     {
       icon: Workflow,
-      title: "Workflow Automation", 
-      description: "Streamline processes with automated decision making and approvals"
+      title: "Agentic Workflow", 
+      description: "AI Agents & human working collaboratively, human decides (Task Specialization, Human in Loop, Process Automation with AI Assisted information processing.)",
+      image: "/api/placeholder/400/200"
     },
     {
-      icon: MessageSquare,
-      title: "Interactive Chat",
-      description: "Natural language interface for complex supply chain queries"
-    },
-    {
-      icon: TrendingUp,
-      title: "Predictive Analytics",
-      description: "Forecast demand, identify risks, and optimize inventory levels"
-    },
-    {
-      icon: Shield,
-      title: "Risk Management",
-      description: "Proactive monitoring and assessment of supplier and operational risks"
-    },
-    {
-      icon: Zap,
-      title: "Real-time Processing",
-      description: "Instant analysis and response to supply chain events"
+      icon: Brain,
+      title: "Transformative",
+      description: "Multiple AI Agents collaborating for outcome, Human in control (E2E Process Orchestration, Overarching business Application.)",
+      image: "/api/placeholder/400/200"
     }
   ]
 
-  const stats = [
-    { label: "Active Apps", value: "12+", description: "Production-ready applications" },
-    { label: "Domains", value: "3", description: "General, Supply Chain & Pharma" },
-    { label: "Processing Time", value: "<2s", description: "Average response time" },
-    { label: "Accuracy", value: "99.2%", description: "Decision accuracy rate" }
+  const sidebarItems = [
+    { icon: Bot, label: "App Store", active: true },
+    { icon: Workflow, label: "Build your own Agents", active: false },
+    { icon: TrendingUp, label: "AI Academy", active: false },
+    { icon: Shield, label: "Usage Insights", active: false },
+    { icon: Zap, label: "Responsible AI", active: false },
+    { icon: MessageSquare, label: "Raise a ticket", active: false },
+    { icon: Network, label: "Feedback", active: false }
   ]
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex">
       <AppHeader />
       
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
-        <div className="globe-decoration absolute inset-0" />
-        <div className="container relative py-20 sm:py-28">
-          <div className="text-center max-w-4xl mx-auto animate-fade-in">
-            <Badge className="mb-6 px-4 py-2 text-sm font-medium" variant="secondary">
-              Next-Generation Supply Chain Intelligence
-            </Badge>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-8">
-              SupplyAI Studio
-            </h1>
-            <p className="text-xl sm:text-2xl text-muted-foreground mb-12 leading-relaxed">
-              Transform your supply chain with AI-powered agents, intelligent workflows, 
-              and predictive analytics. Built for enterprises that demand excellence.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-              <Button 
-                size="lg" 
-                className="px-8 py-4 text-lg font-medium"
-                onClick={() => navigate('/appstore')}
-              >
-                Explore Applications
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-                Watch Demo
-              </Button>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">{stat.value}</div>
-                  <div className="font-medium text-foreground mb-1">{stat.label}</div>
-                  <div className="text-sm text-muted-foreground">{stat.description}</div>
-                </div>
-              ))}
-            </div>
+      {/* Left Sidebar */}
+      <div className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-card border-r border-border p-4">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-sm">SA</span>
+          </div>
+          <div>
+            <h2 className="font-semibold text-foreground">SupplyAI Studio</h2>
+            <p className="text-xs text-muted-foreground">Deep Farkade</p>
           </div>
         </div>
-      </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Powered by Advanced AI Capabilities
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our comprehensive suite of AI tools transforms how you manage, 
-              optimize, and scale your supply chain operations.
-            </p>
-          </div>
+        <nav className="space-y-2">
+          {sidebarItems.map((item, index) => (
+            <button
+              key={index}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                item.active 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
+              onClick={() => item.active && navigate('/appstore')}
+            >
+              <item.icon className="h-4 w-4" />
+              <span className="text-sm">{item.label}</span>
+            </button>
+          ))}
+        </nav>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <feature.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold">{feature.title}</h3>
-                </div>
-                <p className="text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
-              </Card>
-            ))}
-          </div>
+        <div className="absolute bottom-4 left-4 right-4">
+          <Button variant="outline" className="w-full text-sm">
+            Logout
+          </Button>
         </div>
-      </section>
+      </div>
 
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="container">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-              Ready to Transform Your Supply Chain?
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Join leading enterprises using SupplyAI Studio to optimize operations, 
-              reduce costs, and accelerate growth.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="px-8 py-4 text-lg"
-                onClick={() => navigate('/appstore')}
-              >
-                Start Exploring
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-                Schedule Demo
-              </Button>
+      {/* Main Content */}
+      <div className="flex-1 ml-64 mr-80">
+        <div className="relative overflow-hidden min-h-[calc(100vh-4rem)]">
+          {/* Globe Background Decoration */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-96 h-96 opacity-10">
+              <svg viewBox="0 0 400 400" className="w-full h-full text-foreground">
+                <defs>
+                  <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <circle cx="10" cy="10" r="1" fill="currentColor" opacity="0.3"/>
+                  </pattern>
+                </defs>
+                <circle cx="200" cy="200" r="180" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.2"/>
+                <circle cx="200" cy="200" r="140" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.2"/>
+                <circle cx="200" cy="200" r="100" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.2"/>
+                <rect width="400" height="400" fill="url(#dots)"/>
+                <path d="M20 200 Q200 100 380 200 Q200 300 20 200" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+                <path d="M200 20 Q300 200 200 380 Q100 200 200 20" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+              </svg>
+            </div>
+          </div>
+
+          <div className="relative z-10 p-8 flex items-center justify-center min-h-[calc(100vh-4rem)]">
+            <div className="max-w-4xl mx-auto">
+              {/* Features Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                {features.map((feature, index) => (
+                  <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-all duration-200 bg-card/80 backdrop-blur-sm">
+                    <CardHeader>
+                      <CardTitle className="text-lg font-semibold">{feature.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-sm leading-relaxed mb-4">
+                        {feature.description}
+                      </CardDescription>
+                      {/* Feature Image Placeholder */}
+                      <div className="w-full h-32 bg-muted rounded-lg mb-4 flex items-center justify-center">
+                        <feature.icon className="h-8 w-8 text-muted-foreground" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* CTA Button */}
+              <div className="text-center">
+                <Button 
+                  size="lg" 
+                  className="px-8 py-4 text-lg font-medium"
+                  onClick={() => navigate('/appstore')}
+                >
+                  Explore Applications
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Right Sidebar */}
+      <div className="fixed right-0 top-16 w-80 h-[calc(100vh-4rem)] bg-card border-l border-border p-4">
+        <div className="space-y-6">
+          {/* Test Capabilities */}
+          <div className="bg-muted/30 rounded-lg p-4">
+            <h3 className="font-medium text-foreground mb-2 flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              Test SupplyAI Studios abilities
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              See what steps SupplyAI Studio is currently undertaking to develop a trusted AI framework.
+            </p>
+          </div>
+
+          {/* Chat History */}
+          <div>
+            <h3 className="font-medium text-foreground mb-3 flex items-center gap-2">
+              <MessageSquare className="h-4 w-4 text-primary" />
+              Chat History
+              <Badge variant="secondary" className="ml-auto text-xs">0</Badge>
+            </h3>
+            <div className="text-sm text-muted-foreground">
+              No recent conversations
+            </div>
+          </div>
+
+          {/* Your Prompts */}
+          <div>
+            <h3 className="font-medium text-foreground mb-3 flex items-center gap-2">
+              <Brain className="h-4 w-4 text-primary" />
+              Your Prompts
+              <Badge variant="secondary" className="ml-auto text-xs">0</Badge>
+            </h3>
+            <div className="text-sm text-muted-foreground">
+              No saved prompts
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

@@ -17,8 +17,8 @@
     --text-dark: 229 231 235; /* #E5E7EB */
     
     /* Accent & Semantic Colors */
-    --accent: 234 179 8; /* #eab308 - Proper amber */
-    --accent-hover: 217 119 6; /* #d97706 - Darker amber */
+    --accent: 59 130 246; /* #3b82f6 - Blue accent */
+    --accent-hover: 37 99 235; /* #2563eb - Darker blue */
     --accent-foreground: 255 255 255;
     
     /* Borders & Surfaces */
@@ -36,13 +36,13 @@
     --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     
     /* Light Mode Tokens */
-    --background: 248 250 252; /* #f8fafc */
+    --background: 255 255 255; /* #ffffff */
     --foreground: 15 23 42; /* #0f172a */
     --card: 255 255 255; /* #ffffff */  
     --card-foreground: 15 23 42; /* #0f172a */
     --popover: 255 255 255; /* #ffffff */
     --popover-foreground: 15 23 42; /* #0f172a */
-    --primary: 234 179 8; /* #eab308 */
+    --primary: 59 130 246; /* #3b82f6 - blue */
     --primary-foreground: 255 255 255; /* #ffffff */
     --secondary: 241 245 249; /* #f1f5f9 */
     --secondary-foreground: 15 23 42; /* #0f172a */
@@ -50,7 +50,7 @@
     --muted-foreground: 100 116 139; /* #64748b */
     --border: 226 232 240; /* #e2e8f0 */
     --input: 226 232 240; /* #e2e8f0 */
-    --ring: 234 179 8; /* #eab308 */
+    --ring: 59 130 246; /* #3b82f6 */
     --radius: 12px;
 
     --sidebar-background: 0 0% 98%;
@@ -72,21 +72,21 @@
 
   .dark {
     /* Dark Mode Tokens */
-    --background: 11 14 20; /* #0b0e14 */
+    --background: 17 24 39; /* #111827 */
     --foreground: 229 231 235; /* #e5e7eb */
-    --card: 17 24 39; /* #111827 */
+    --card: 31 41 55; /* #1f2937 */
     --card-foreground: 229 231 235; /* #e5e7eb */
-    --popover: 17 24 39; /* #111827 */
+    --popover: 31 41 55; /* #1f2937 */
     --popover-foreground: 229 231 235; /* #e5e7eb */
-    --primary: 234 179 8; /* #eab308 */
+    --primary: 59 130 246; /* #3b82f6 */
     --primary-foreground: 255 255 255; /* #ffffff */
-    --secondary: 30 41 59; /* #1e293b */
+    --secondary: 55 65 81; /* #374151 */
     --secondary-foreground: 229 231 235; /* #e5e7eb */
-    --muted: 15 23 42; /* #0f172a */
-    --muted-foreground: 148 163 184; /* #94a3b8 */
-    --border: 30 41 59; /* #1e293b */
-    --input: 30 41 59; /* #1e293b */
-    --ring: 234 179 8; /* #eab308 */
+    --muted: 55 65 81; /* #374151 */
+    --muted-foreground: 156 163 175; /* #9ca3af */
+    --border: 75 85 99; /* #4b5563 */
+    --input: 75 85 99; /* #4b5563 */
+    --ring: 59 130 246; /* #3b82f6 */
     
     --sidebar-background: var(--bg-dark);
     --sidebar-foreground: var(--text-dark);
