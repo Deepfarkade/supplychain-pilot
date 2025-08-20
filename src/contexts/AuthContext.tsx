@@ -115,6 +115,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const extended = authService.extendSession();
     if (extended) {
       setShowTimeoutModal(false);
+      setTimeoutSeconds(120); // Reset to initial value
       console.log('🔄 Session extended successfully');
     }
     return extended;

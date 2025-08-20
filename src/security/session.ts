@@ -18,6 +18,7 @@ class SessionManager {
   private onTimeoutCallback?: SessionTimeoutCallback;
   private onWarningCallback?: SessionWarningCallback;
   private activityListeners: (() => void)[] = [];
+  private warningCountdownInterval?: NodeJS.Timeout;
 
   constructor() {
     this.setupActivityListeners();
@@ -151,6 +152,12 @@ class SessionManager {
       clearTimeout(this.sessionState.warningTimeoutId);
       this.sessionState.warningTimeoutId = undefined;
     }
+
+    // Clear warning countdown interval
+    if (this.warningCountdownInterval) {
+      clearInterval(this.warningCountdownInterval);
+      this.warningCountdownInterval = undefined;
+    }
   }
 
   // Show session warning
@@ -163,7 +170,7 @@ class SessionManager {
     // Start countdown timer for warning
     let remainingSeconds = this.config.warningTimeoutSeconds;
     
-    const countdownInterval = setInterval(() => {
+    this.warningCountdownInterval = setInterval(() => {
       remainingSeconds--;
       
       if (this.onWarningCallback) {
@@ -171,7 +178,8 @@ class SessionManager {
       }
 
       if (remainingSeconds <= 0) {
-        clearInterval(countdownInterval);
+        clearInterval(this.warningCountdownInterval!);
+        this.warningCountdownInterval = undefined;
         this.handleSessionTimeout();
       }
     }, 1000);
