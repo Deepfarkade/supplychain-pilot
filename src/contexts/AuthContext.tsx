@@ -52,11 +52,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      // TODO: Replace with actual Azure API call
-      // Simulating API call for now
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // TODO: Replace with actual Azure/MongoDB API call
+      // For now, try MongoDB service first, fallback to dummy credentials
       
-      // Dummy credentials for testing
+      // Import MongoDB service dynamically to avoid circular dependencies
+      const { mongoService } = await import('@/services/database/mongodb');
+      
+      try {
+        const authenticatedUser = await mongoService.authenticateUser(email, password);
+        if (authenticatedUser) {
+          const user: User = {
+            id: authenticatedUser._id || '1',
+            email: authenticatedUser.email,
+            name: authenticatedUser.name
+          };
+          
+          const token = 'jwt-token-' + Date.now();
+          
+          setUser(user);
+          localStorage.setItem('auth_token', token);
+          localStorage.setItem('user_data', JSON.stringify(user));
+          
+          return true;
+        }
+      } catch (mongoError) {
+        console.log('MongoDB auth failed, falling back to dummy credentials');
+      }
+      
+      // Fallback to dummy credentials for development
       const validCredentials = [
         { email: 'admin@supplychainai.com', password: 'admin123', name: 'Admin User' },
         { email: 'user@supplychainai.com', password: 'user123', name: 'Supply Chain User' }

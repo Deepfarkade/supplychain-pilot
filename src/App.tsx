@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Home from "./pages/Home";
 import AppStore from "./pages/AppStore";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { MicroserviceContainer } from "./components/MicroserviceContainer";
 
@@ -24,6 +25,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
               <Route path="/appstore" element={<ProtectedRoute><AppStore /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               {/* Microservice Routes */}
               <Route path="/app/:domain/:slug" element={<ProtectedRoute><MicroserviceContainer /></ProtectedRoute>} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
