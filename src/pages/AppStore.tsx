@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppCard } from '@/components/AppCard';
 import { AppHeader } from '@/components/AppHeader';
 import { Loading } from '@/components/Loading';
+import { getAllMicroservices, getMicroservicesByDomain } from '@/microservices/registry';
 
 // Import generated images
 import conversationalAgentsImg from '@/assets/conversational-agents.jpg'
@@ -17,91 +18,72 @@ import documentAnalysisImg from '@/assets/document-analysis.jpg'
 import directGptImg from '@/assets/direct-gpt.jpg'
 import inventoryDashboardImg from '@/assets/inventory-dashboard.jpg'
 
-// App data organized by domain
-const appData = {
-  general: [
-    {
-      title: 'Conversational Agents',
-      description: 'Test the deployed models and its output to a simple chatbot. Customize with translation and personalised prompts.',
-      imageUrl: conversationalAgentsImg,
-      domain: 'general',
-      slug: 'conversational-agents'
-    },
-    {
-      title: 'Direct GPT',
-      description: 'Azure ChatGPT, playground to explore different model\'s capabilities',
-      imageUrl: directGptImg,
-      domain: 'general',
-      slug: 'direct-gpt'
-    },
-    {
-      title: 'Document Comparer',
-      description: 'Demonstrate the power of GenAI on knowledge base QnA.',
-      imageUrl: documentAnalysisImg,
-      domain: 'general',
-      slug: 'document-comparer'
-    }
-  ],
-  'supply-chain': [
-    {
-      title: 'RFQ-to-Award Co-Pilot',
-      description: 'Streamline procurement processes with AI-powered RFQ analysis and supplier selection automation.',
-      imageUrl: supplyChainNetworkImg,
-      domain: 'supply-chain',
-      slug: 'rfq-to-award'
-    },
-    {
-      title: 'Demand Forecast Review',
-      description: 'Advanced demand forecasting with machine learning models and supply chain optimization.',
-      imageUrl: inventoryDashboardImg,
-      domain: 'supply-chain',
-      slug: 'demand-forecast'
-    },
-    {
-      title: 'Supplier Risk Monitor',
-      description: 'Real-time supplier risk assessment and monitoring with predictive analytics.',
-      imageUrl: supplyChainNetworkImg,
-      domain: 'supply-chain',
-      slug: 'supplier-risk'
-    },
-    {
-      title: 'Inventory Rebalancer',
-      description: 'Intelligent inventory optimization and automated rebalancing across distribution networks.',
-      imageUrl: inventoryDashboardImg,
-      domain: 'supply-chain',
-      slug: 'inventory-rebalancer'
-    }
-  ],
-  pharma: [
-    {
-      title: 'Batch Release Assistant',
-      description: 'AI-powered batch release decision support with regulatory compliance validation.',
-      imageUrl: pharmaLabImg,
-      domain: 'pharma',
-      slug: 'batch-release'
-    },
-    {
-      title: 'Deviation CAPA Summarizer',
-      description: 'Automated deviation analysis and CAPA recommendation generation for quality management.',
-      imageUrl: pharmaLabImg,
-      domain: 'pharma',
-      slug: 'deviation-capa'
-    },
-    {
-      title: 'Regulatory Dossier Helper',
-      description: 'Intelligent regulatory document preparation and compliance verification assistant.',
-      imageUrl: documentAnalysisImg,
-      domain: 'pharma',
-      slug: 'regulatory-dossier'
-    }
-  ]
-}
+// Image mapping for microservices
+const imageMapping = {
+  'conversational-agents': conversationalAgentsImg,
+  'direct-gpt': directGptImg,
+  'document-comparer': documentAnalysisImg,
+  'rfq-to-award': supplyChainNetworkImg,
+  'demand-forecast': inventoryDashboardImg,
+  'supplier-risk': supplyChainNetworkImg,
+  'inventory-rebalancer': inventoryDashboardImg,
+  'order-management': supplyChainNetworkImg,
+  'batch-release': pharmaLabImg,
+  'deviation-capa': pharmaLabImg,
+  'regulatory-dossier': documentAnalysisImg,
+};
+
+// Default descriptions for microservices if not provided
+const defaultDescriptions = {
+  'conversational-agents': 'Test the deployed models and its output to a simple chatbot. Customize with translation and personalised prompts.',
+  'direct-gpt': 'Azure ChatGPT, playground to explore different model\'s capabilities',
+  'document-comparer': 'Demonstrate the power of GenAI on knowledge base QnA.',
+  'rfq-to-award': 'Streamline procurement processes with AI-powered RFQ analysis and supplier selection automation.',
+  'demand-forecast': 'Advanced demand forecasting with machine learning models and supply chain optimization.',
+  'supplier-risk': 'Real-time supplier risk assessment and monitoring with predictive analytics.',
+  'inventory-rebalancer': 'Intelligent inventory optimization and automated rebalancing across distribution networks.',
+  'order-management': 'Intelligent order processing and management with AI-powered chat assistance for streamlined operations.',
+  'batch-release': 'AI-powered batch release decision support with regulatory compliance validation.',
+  'deviation-capa': 'Automated deviation analysis and CAPA recommendation generation for quality management.',
+  'regulatory-dossier': 'Intelligent regulatory document preparation and compliance verification assistant.',
+};
 
 const AppStore = () => {
   const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('general')
   const [isLoading, setIsLoading] = useState(false)
+
+  // Get dynamic app data from registry
+  const appData = useMemo(() => {
+    const allMicroservices = getAllMicroservices();
+    
+    const groupedData = {
+      general: [] as any[],
+      'supply-chain': [] as any[],
+      pharma: [] as any[]
+    };
+
+    allMicroservices.forEach(ms => {
+      const appInfo = {
+        title: ms.name,
+        description: defaultDescriptions[ms.slug as keyof typeof defaultDescriptions] || `AI-powered ${ms.name.toLowerCase()} solution`,
+        imageUrl: imageMapping[ms.slug as keyof typeof imageMapping] || supplyChainNetworkImg,
+        domain: ms.domain,
+        slug: ms.slug
+      };
+
+      if (ms.domain === 'general') {
+        groupedData.general.push(appInfo);
+      } else if (ms.domain === 'supply-chain') {
+        groupedData['supply-chain'].push(appInfo);
+      } else if (ms.domain === 'pharma') {
+        groupedData.pharma.push(appInfo);
+      }
+    });
+
+    return groupedData;
+  }, []);
 
   // Filter apps based on search query
   const filteredApps = useMemo(() => {
@@ -111,7 +93,7 @@ const AppStore = () => {
       app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.description.toLowerCase().includes(searchQuery.toLowerCase())
     )
-  }, [searchQuery, activeTab])
+  }, [searchQuery, activeTab, appData])
 
   const handleExplore = (domain: string, slug: string) => {
     setIsLoading(true)
