@@ -11,7 +11,8 @@ import {
   HelpCircle, 
   Bell, 
   User,
-  ChevronDown
+  ChevronDown,
+  Package
 } from 'lucide-react'
 import { useTheme } from '@/components/ThemeProvider'
 import {
@@ -59,23 +60,23 @@ export function AppHeader() {
           {/* Brand */}
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
-              NA
+              <Package className="w-4 h-4" />
             </div>
-            <div className="font-semibold text-foreground">Nexus AI Hub</div>
+            <div className="font-semibold text-foreground">SupplyChain AI Studio</div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-2">
             {navigationItems.map((item) => (
               <Button
                 key={item.path}
                 variant={isActive(item.path) ? "default" : "ghost"}
                 size="sm"
                 onClick={() => navigate(item.path)}
-                className={`flex items-center gap-2 ${
+                className={`flex items-center gap-2 transition-all duration-200 hover:scale-105 ${
                   isActive(item.path) 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'bg-primary text-primary-foreground shadow-sm' 
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                 }`}
               >
                 <item.icon className="w-4 h-4" />

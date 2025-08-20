@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -12,28 +12,43 @@ import {
   Shield, 
   FileText,
   MessageSquare,
-  Workflow,
-  Zap,
-  ChevronRight,
-  TestTube,
-  Clock,
-  Lightbulb
+  LogOut,
+  Truck,
+  Package
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { AppHeader } from '@/components/AppHeader'
+import { Loading } from '@/components/Loading'
 
 const Home = () => {
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const handleNavigation = async (path: string) => {
+    if (path) {
+      setIsLoading(true)
+      // Small delay for smooth transition
+      setTimeout(() => {
+        navigate(path)
+        setIsLoading(false)
+      }, 300)
+    }
+  }
 
   const sidebarItems = [
-    { icon: HomeIcon, label: 'Home', active: true },
-    { icon: Grid3X3, label: 'App Store', active: false },
-    { icon: Bot, label: 'Build your own Agents', active: false },
-    { icon: GraduationCap, label: 'AI Academy', active: false },
-    { icon: BarChart3, label: 'Usage Insights', active: false },
-    { icon: Shield, label: 'Responsible AI', active: false },
-    { icon: FileText, label: 'Raise a ticket', active: false },
-    { icon: MessageSquare, label: 'Feedback', active: false }
+    { icon: HomeIcon, label: 'Home', active: true, path: '/' },
+    { icon: Grid3X3, label: 'App Store', active: false, path: '/appstore' },
+    { icon: Bot, label: 'Build your own Agents', active: false, path: '/agents' },
+    { icon: GraduationCap, label: 'AI Academy', active: false, path: '/academy' },
+    { icon: BarChart3, label: 'Usage Insights', active: false, path: '/insights' },
+    { icon: Shield, label: 'Responsible AI', active: false, path: '/responsible-ai' },
+    { icon: FileText, label: 'Raise a ticket', active: false, path: '/support' },
+    { icon: MessageSquare, label: 'Feedback', active: false, path: '/feedback' }
   ]
 
   const mainFeatures = [
@@ -57,26 +72,13 @@ const Home = () => {
     }
   ]
 
-  const rightPanelItems = [
-    {
-      title: 'Test Nexus AI Hub abilities',
-      icon: TestTube,
-      items: []
-    },
-    {
-      title: 'Chat History',
-      icon: Clock,
-      items: []
-    },
-    {
-      title: 'Your Prompts',
-      icon: Lightbulb,
-      items: []
-    }
-  ]
+
+  if (!mounted) {
+    return <Loading className="min-h-screen" />
+  }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen bg-background transition-opacity duration-300 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
       <AppHeader />
       <div className="flex">
         {/* Left Sidebar */}
@@ -84,115 +86,122 @@ const Home = () => {
           {/* User Profile */}
           <div className="p-4 border-b border-sidebar-border">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm">
-                NA
+              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
+                <Package className="w-5 h-5" />
               </div>
               <div>
-                <div className="font-medium text-sidebar-foreground text-sm">Nexus AI</div>
-                <div className="text-xs text-sidebar-foreground/70">Intelligence</div>
-                <div className="text-xs text-sidebar-foreground/70">HUB</div>
+                <div className="font-semibold text-sidebar-foreground text-sm">SupplyChain</div>
+                <div className="text-xs text-sidebar-foreground/70">AI Studio</div>
               </div>
             </div>
           </div>
 
           {/* User Info */}
-          <div className="px-4 py-3 border-b border-sidebar-border">
-            <div className="flex items-center gap-2">
-              <User className="w-4 h-4 text-sidebar-foreground/70" />
-              <span className="text-sm text-sidebar-foreground">Deep Farkade</span>
+          <div className="px-4 py-2 border-b border-sidebar-border">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4 text-sidebar-foreground/70" />
+                <span className="text-sm text-sidebar-foreground">Deep Farkade</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 px-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+                onClick={() => handleNavigation('')}
+              >
+                <LogOut className="w-3 h-3 mr-1" />
+                Logout
+              </Button>
             </div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-1">
+          <nav className="flex-1 p-3 space-y-1">
             {sidebarItems.map((item, index) => (
               <button
                 key={index}
-                onClick={() => item.label === 'App Store' && navigate('/appstore')}
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                onClick={() => handleNavigation(item.path)}
+                disabled={isLoading}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 hover:scale-[1.02] ${
                   item.active 
-                    ? 'bg-sidebar-primary text-sidebar-primary-foreground font-medium' 
+                    ? 'bg-primary text-primary-foreground font-medium shadow-sm' 
                     : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
-                }`}
+                } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <item.icon className="w-4 h-4" />
-                {item.label}
+                <item.icon className="w-4 h-4 flex-shrink-0" />
+                <span className="truncate">{item.label}</span>
+                {isLoading && item.path && (
+                  <div className="animate-spin rounded-full h-3 w-3 border border-current border-t-transparent ml-auto"></div>
+                )}
               </button>
             ))}
           </nav>
-
-          {/* Logout */}
-          <div className="p-4 border-t border-sidebar-border">
-            <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
-              <ChevronRight className="w-4 h-4" />
-              Logout
-            </button>
-          </div>
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex">
-          {/* Center Content */}
-          <div className="flex-1 relative overflow-hidden">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 network-pattern" />
-            <div className="absolute inset-0 dotted-pattern opacity-30" />
-            
-            {/* Content */}
-            <div className="relative z-10 p-8">
-              <div className="max-w-4xl mx-auto">
-                {/* Main Feature Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20">
-                  {mainFeatures.map((feature, index) => (
-                    <Card key={index} className={`${feature.className} border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}>
-                      <CardContent className="p-6">
-                        <div className="aspect-video mb-4 rounded-lg overflow-hidden bg-white/20 backdrop-blur-sm">
-                          <img 
-                            src={feature.image} 
-                            alt={feature.title}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <h3 className="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">
-                          {feature.title}
-                        </h3>
-                        <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
-                          {feature.description}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+        <div className="flex-1 relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 network-pattern" />
+          <div className="absolute inset-0 dotted-pattern opacity-30" />
+          
+          {/* Content */}
+          <div className="relative z-10 p-8">
+            <div className="max-w-6xl mx-auto">
+              {/* Welcome Section */}
+              <div className="mb-12 text-center animate-fade-in">
+                <h1 className="text-3xl font-bold text-foreground mb-4">
+                  Welcome to SupplyChain AI Studio
+                </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Revolutionize your supply chain operations with intelligent AI-powered solutions
+                </p>
+              </div>
+
+              {/* Main Feature Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {mainFeatures.map((feature, index) => (
+                  <Card 
+                    key={index} 
+                    className={`${feature.className} border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer animate-fade-in`}
+                    style={{ animationDelay: `${index * 150}ms` }}
+                  >
+                    <CardContent className="p-6">
+                      <div className="aspect-video mb-4 rounded-lg overflow-hidden bg-white/20 backdrop-blur-sm">
+                        <img 
+                          src={feature.image} 
+                          alt={feature.title}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                        />
+                      </div>
+                      <h3 className="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">
+                        {feature.title}
+                      </h3>
+                      <p className="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Quick Stats */}
+              <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6 animate-fade-in" style={{ animationDelay: '600ms' }}>
+                {[
+                  { label: 'Supply Chain Networks', value: '50+', icon: Truck },
+                  { label: 'AI Models Deployed', value: '120+', icon: Bot },
+                  { label: 'Cost Reduction', value: '35%', icon: BarChart3 },
+                  { label: 'Process Efficiency', value: '90%', icon: Shield }
+                ].map((stat, index) => (
+                  <Card key={index} className="bg-card/50 backdrop-blur border hover:bg-card/70 transition-all duration-300">
+                    <CardContent className="p-4 text-center">
+                      <stat.icon className="w-8 h-8 mx-auto mb-2 text-primary" />
+                      <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+                      <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
-          </div>
-
-          {/* Right Sidebar */}
-          <div className="w-80 bg-sidebar border-l border-sidebar-border p-4 space-y-4">
-            {rightPanelItems.map((panel, index) => (
-              <Card key={index} className="bg-sidebar-accent border-sidebar-border">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <panel.icon className="w-4 h-4 text-sidebar-primary" />
-                    <h3 className="font-medium text-sm text-sidebar-foreground">
-                      {panel.title}
-                    </h3>
-                  </div>
-                  <div className="text-xs text-sidebar-foreground/70">
-                    {panel.items.length === 0 ? 'No items yet' : `${panel.items.length} items`}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-
-            {/* Bottom Panel */}
-            <Card className="bg-sidebar-accent border-sidebar-border">
-              <CardContent className="p-4">
-                <div className="text-xs text-sidebar-foreground/70 leading-relaxed">
-                  See what steps Nexus AI Hub is currently undertaking to develop a trusted AI framework.
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
