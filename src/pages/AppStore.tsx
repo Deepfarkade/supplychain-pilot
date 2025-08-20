@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from 'react'
-import { AppHeader } from '@/components/AppHeader'
-import { AppCard } from '@/components/AppCard'
-import { RightRail } from '@/components/RightRail'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Badge } from '@/components/ui/badge'
-import { Search } from 'lucide-react'
+import React, { useState, useMemo } from 'react';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { AppCard } from '@/components/AppCard';
+import { RightRail } from '@/components/RightRail';
+import { AppHeader } from '@/components/AppHeader';
 
 // Import generated images
 import conversationalAgentsImg from '@/assets/conversational-agents.jpg'
@@ -120,19 +122,25 @@ const AppStore = () => {
       <AppHeader />
       
       {/* Header Section */}
-      <section className="bg-muted/30 py-12">
-        <div className="container">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4">Application Store</h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+      <div className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 network-pattern" />
+        <div className="absolute inset-0 dotted-pattern opacity-30" />
+        
+        <div className="relative z-10 container mx-auto px-4 py-16">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl font-bold text-foreground mb-4">
+              Application Store
+            </h1>
+            <p className="text-lg text-muted-foreground">
               Discover and deploy AI-powered applications for your supply chain operations
             </p>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Main Content */}
-      <section className="container py-12">
+      <div className="container mx-auto px-4 py-12">
         <div className="flex gap-8">
           {/* Main Content Area */}
           <div className="flex-1">
@@ -233,7 +241,7 @@ const AppStore = () => {
           {/* Right Rail */}
           <RightRail />
         </div>
-      </section>
+      </div>
     </div>
   )
 }

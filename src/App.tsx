@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="system" storageKey="supplyai-studio-theme">
+    <ThemeProvider defaultTheme="system" storageKey="nexus-ai-hub-theme">
       <TooltipProvider>
         <Toaster />
         <Sonner />

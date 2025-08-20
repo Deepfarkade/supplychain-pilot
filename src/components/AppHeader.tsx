@@ -1,139 +1,157 @@
 import React from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { 
+  Home, 
+  Grid3X3, 
+  Bot, 
+  Moon, 
+  Sun, 
+  HelpCircle, 
+  Bell, 
+  User,
+  ChevronDown
+} from 'lucide-react'
+import { useTheme } from '@/components/ThemeProvider'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { ThemeToggle } from './ThemeToggle'
-import { ChevronDown, Bell, HelpCircle, Grid3X3, Settings, Home } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-
-const apps = [
-  'Conversational Agents',
-  'Conversational Agents V2',
-  'Direct GPT',
-  'Document Comparer',
-  'Document Intelligence',
-  'Document Summarizer',
-  'Document Translator',
-  'Document Writer',
-  'Email Automation',
-  'Gap Analyzer',
-  'Golden Document Creator',
-  'Graphical Intelligence',
-  'Invoice Factoring'
-]
-
-const agentConfigs = [
-  'Demand Forecast Review',
-  'RFQ-to-Award Co-Pilot',
-  'Supplier Risk Monitor',
-  'Inventory Rebalancer',
-  'Batch Release Assistant',
-  'Deviation CAPA Summarizer',
-  'Regulatory Dossier Helper'
-]
 
 export function AppHeader() {
   const navigate = useNavigate()
-  
+  const location = useLocation()
+  const { theme, setTheme } = useTheme()
+
+  const apps = [
+    'Conversational Agents',
+    'Direct GPT',
+    'Document Comparer',
+    'Inventory Dashboard',
+    'Supply Chain Network',
+    'Pharma Lab Analysis'
+  ]
+
+  const agentConfigs = [
+    'Supply Chain Optimizer',
+    'Risk Assessment Agent',
+    'Demand Forecasting Agent',
+    'Inventory Management Agent',
+    'Quality Control Agent'
+  ]
+
+  const navigationItems = [
+    { icon: Home, label: 'Home', path: '/' },
+    { icon: Grid3X3, label: 'App Store', path: '/appstore' },
+    { icon: Bot, label: 'Agent Configuration', path: '/agents' }
+  ]
+
+  const isActive = (path: string) => location.pathname === path
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        {/* Left Side */}
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-14 items-center px-4">
+        {/* Left side - Brand and Navigation */}
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="h-8 w-8 rounded bg-accent flex items-center justify-center">
-              <span className="text-accent-foreground font-bold text-sm">SA</span>
+          {/* Brand */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
+              NA
             </div>
-            <span className="font-semibold text-lg">SupplyAI Studio</span>
+            <div className="font-semibold text-foreground">Nexus AI Hub</div>
           </div>
-          
-          <nav className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              className="gap-2"
-              onClick={() => navigate('/')}
-            >
-              <Home className="h-4 w-4" />
-              Home
-            </Button>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="gap-2" onClick={() => navigate('/appstore')}>
-                  <Grid3X3 className="h-4 w-4" />
-                  App Store
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 max-h-64 overflow-y-auto scrollbar-thin">
-                {apps.map((app) => (
-                  <DropdownMenuItem key={app} className="cursor-pointer">
-                    {app}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="gap-2">
-                  <Settings className="h-4 w-4" />
-                  Agent Configuration
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 max-h-64 overflow-y-auto scrollbar-thin">
-                {agentConfigs.map((config) => (
-                  <DropdownMenuItem key={config} className="cursor-pointer">
-                    {config}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+
+          {/* Navigation */}
+          <nav className="flex items-center gap-1">
+            {navigationItems.map((item) => (
+              <Button
+                key={item.path}
+                variant={isActive(item.path) ? "default" : "ghost"}
+                size="sm"
+                onClick={() => navigate(item.path)}
+                className={`flex items-center gap-2 ${
+                  isActive(item.path) 
+                    ? 'bg-primary text-primary-foreground' 
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <item.icon className="w-4 h-4" />
+                {item.label}
+              </Button>
+            ))}
           </nav>
         </div>
 
-        {/* Right Side */}
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <HelpCircle className="h-5 w-5" />
+        {/* Right side - Controls */}
+        <div className="ml-auto flex items-center gap-2">
+          {/* Applications Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                Applications
+                <ChevronDown className="w-3 h-3" />
               </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Help & Documentation</SheetTitle>
-              </SheetHeader>
-              <div className="py-6">
-                <p className="text-muted-foreground">
-                  Welcome to the Supply Chain Co-Pilot. Access documentation, 
-                  tutorials, and support resources here.
-                </p>
-              </div>
-            </SheetContent>
-          </Sheet>
-          
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs">
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 max-h-80 overflow-y-auto bg-popover border border-border">
+              {apps.map((app) => (
+                <DropdownMenuItem key={app} className="cursor-pointer">
+                  {app}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Agent Configuration Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                Agent Config
+                <ChevronDown className="w-3 h-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 max-h-80 overflow-y-auto bg-popover border border-border">
+              {agentConfigs.map((config) => (
+                <DropdownMenuItem key={config} className="cursor-pointer">
+                  {config}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          >
+            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+
+          {/* Help */}
+          <Button variant="ghost" size="sm">
+            <HelpCircle className="w-4 h-4" />
+          </Button>
+
+          {/* Notifications */}
+          <Button variant="ghost" size="sm" className="relative">
+            <Bell className="w-4 h-4" />
+            <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 text-[10px]">
               3
             </Badge>
           </Button>
-          
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="/placeholder-avatar.jpg" />
-            <AvatarFallback>DF</AvatarFallback>
-          </Avatar>
+
+          {/* User Avatar */}
+          <Button variant="ghost" size="sm" className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-medium">
+              DF
+            </div>
+            <span className="text-sm">DF</span>
+          </Button>
         </div>
       </div>
     </header>
