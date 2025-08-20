@@ -70,6 +70,14 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     component: 'InventoryRebalancer',
     development: true
   },
+  {
+    domain: 'supply-chain',
+    slug: 'order-management',
+    name: 'Order Management Agent',
+    path: '/app/supply-chain/order-management',
+    component: 'OrderManagement',
+    development: true
+  },
   
   // Pharma Domain
   {
