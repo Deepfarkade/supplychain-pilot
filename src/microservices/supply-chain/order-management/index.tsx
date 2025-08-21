@@ -72,8 +72,7 @@ const OrderManagement: React.FC = () => {
                 {/* Chat iframe with same dimensions as RFQ upload box */}
                 <div className="border rounded-lg overflow-hidden" style={{ height: '600px' }}>
                   <iframe
-                    {/* src="http://localhost:5678/webhook/136ebda1-31fc-4444-868c-ca9fa34f3bc7/chat" */}
-                  src = https://geni-ai-supply-chain-decisioning.wonderfulbush-77ea8b18.centralindia.azurecontainerapps.io/
+                    src="https://geni-ai-supply-chain-decisioning.wonderfulbush-77ea8b18.centralindia.azurecontainerapps.io/"
                     className="w-full h-full border-0"
                     title="Order Management Chat"
                     allow="microphone; camera"
