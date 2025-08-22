@@ -46,7 +46,8 @@ const ConversationalAgents: React.FC = () => {
       description="Test deployed models with customizable chatbot interface, translation and personalized prompts"
       icon={MessageSquare}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Example: Override only padding for this specific microservice
+      layout={{ padding: 'md' }}
       metadata={{
         title: 'Conversational Agents - AI Chat Interface',
         description: 'Interactive AI chatbot with customizable prompts and translation capabilities'

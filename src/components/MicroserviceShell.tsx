@@ -11,6 +11,7 @@ import { ArrowLeft, LucideIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { MicroserviceLayout } from '@/types/microservice';
+import { mergeWithDefaults } from '@/config/microservice-defaults';
 
 interface MicroserviceShellProps {
   /** Page title */
@@ -49,12 +50,14 @@ const MicroserviceShell: React.FC<MicroserviceShellProps> = memo(({
 }) => {
   const navigate = useNavigate();
   
+  // Merge user layout with production defaults
+  const finalLayout = mergeWithDefaults(layout);
   const {
-    fullBleed = true,
-    header = 'compact',
-    padding = 'md',
-    background = 'default'
-  } = layout;
+    fullBleed,
+    header,
+    padding,
+    background
+  } = finalLayout;
 
   const handleBack = () => {
     navigate(backTo);
@@ -194,11 +197,11 @@ const MicroserviceShell: React.FC<MicroserviceShellProps> = memo(({
         </div>
       </div>
 
-      {/* Main Content Area - Full width with minimal side padding */}
+      {/* Main Content Area - Production optimized for maximum space */}
       <main className={cn(
         'flex-1 w-full',
-        paddingClasses[padding] === '' ? 'px-2 sm:px-4' : paddingClasses[padding], // Minimal side padding
-        'max-w-none' // Remove max-width constraint
+        paddingClasses[padding] === '' ? 'px-1 sm:px-2' : paddingClasses[padding], // Minimal side padding for max space
+        'max-w-none' // Full width utilization
       )}>
         {children}
       </main>
