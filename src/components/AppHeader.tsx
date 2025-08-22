@@ -1,7 +1,6 @@
 import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { 
   Home, 
   Grid3X3, 
@@ -9,8 +8,6 @@ import {
   Moon, 
   Sun, 
   HelpCircle, 
-  Bell, 
-  User,
   ChevronDown,
   Package
 } from 'lucide-react'
@@ -21,6 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import NotificationPanel from '@/components/NotificationPanel'
 
 export function AppHeader() {
   const navigate = useNavigate()
@@ -139,20 +137,7 @@ export function AppHeader() {
           </Button>
 
           {/* Notifications */}
-          <Button variant="ghost" size="sm" className="relative">
-            <Bell className="w-4 h-4" />
-            <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 text-[10px]">
-              3
-            </Badge>
-          </Button>
-
-          {/* User Avatar */}
-          <Button variant="ghost" size="sm" className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-medium">
-              DF
-            </div>
-            <span className="text-sm">DF</span>
-          </Button>
+          <NotificationPanel />
         </div>
       </div>
     </header>

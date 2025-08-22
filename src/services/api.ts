@@ -263,6 +263,88 @@ class ApiError extends Error {
   }
 }
 
+// Specific API endpoints for common operations
+export const apiEndpoints = {
+  // Authentication
+  login: '/auth/login',
+  logout: '/auth/logout',
+  refresh: '/auth/refresh',
+  me: '/auth/me',
+  
+  // Notifications
+  notifications: '/notifications',
+  notificationsRead: (id: string) => `/notifications/${id}/read`,
+  notificationsReadAll: '/notifications/read-all',
+  notificationsSend: '/notifications/send',
+  
+  // Users
+  users: '/users',
+  userById: (id: string) => `/users/${id}`,
+  
+  // Microservices
+  microservices: '/microservices',
+  microserviceById: (id: string) => `/microservices/${id}`,
+  
+  // Settings
+  settings: '/settings',
+  settingsById: (key: string) => `/settings/${key}`,
+  
+  // Support & Feedback
+  tickets: '/support/tickets',
+  feedback: '/feedback',
+  
+  // Analytics
+  analytics: '/analytics',
+  usage: '/analytics/usage',
+  
+  // File uploads
+  upload: '/upload',
+  uploadMultiple: '/upload/multiple'
+} as const;
+
+// Helper functions for common API operations
+export const apiHelpers = {
+  // Authentication helpers
+  async login(credentials: { email: string; password: string }) {
+    return apiClient.post(apiEndpoints.login, credentials);
+  },
+  
+  async logout() {
+    return apiClient.post(apiEndpoints.logout);
+  },
+  
+  async getCurrentUser() {
+    return apiClient.get(apiEndpoints.me);
+  },
+  
+  // Notification helpers
+  async getNotifications() {
+    return apiClient.get(apiEndpoints.notifications);
+  },
+  
+  async sendNotification(notification: { title: string; message: string; type: string }) {
+    return apiClient.post(apiEndpoints.notificationsSend, notification);
+  },
+  
+  // Settings helpers
+  async getSettings() {
+    return apiClient.get(apiEndpoints.settings);
+  },
+  
+  async updateSetting(key: string, value: unknown) {
+    return apiClient.put(apiEndpoints.settingsById(key), { value });
+  },
+  
+  // Support helpers
+  async createTicket(ticket: { title: string; description: string; priority: string }) {
+    return apiClient.post(apiEndpoints.tickets, ticket);
+  },
+  
+  async sendFeedback(feedback: { type: string; message: string; rating?: number }) {
+    return apiClient.post(apiEndpoints.feedback, feedback);
+  }
+};
+
 // Export singleton instance
 export const apiClient = new ApiClient();
 export { ApiError, ApiClient };
