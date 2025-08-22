@@ -107,7 +107,7 @@ const Home = () => {
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 p-3 space-y-1">
+            <nav className="p-3 space-y-1">
               {sidebarItems.map((item, index) => (
                 <button
                   key={index}
