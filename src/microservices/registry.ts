@@ -41,7 +41,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['chat', 'ai', 'nlp'],
     imageUrl: conversationalAgentsImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/general/conversational-agents'),
+    element: () => import('@/microservices/general/conversational-agents/index'),
     metadata: {
       title: 'Conversational Agents - AI Chat Interface',
       description: 'Interactive AI chatbot with customizable prompts and translation capabilities',
@@ -63,7 +63,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['gpt', 'azure', 'playground'],
     imageUrl: directGptImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/general/direct-gpt'),
+    element: () => import('@/microservices/general/direct-gpt/index'),
     metadata: {
       title: 'Direct GPT - Azure OpenAI Playground',
       description: 'Explore Azure OpenAI models with interactive playground interface',
@@ -85,7 +85,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['documents', 'analysis', 'comparison'],
     imageUrl: documentAnalysisImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/general/document-comparer'),
+    element: () => import('@/microservices/general/document-comparer/index'),
     metadata: {
       title: 'Document Comparer - AI Document Analysis',
       description: 'AI-powered document comparison and knowledge base Q&A system',
@@ -109,7 +109,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['rfq', 'procurement', 'supplier', 'award'],
     imageUrl: supplyChainNetworkImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/supply-chain/rfq-to-award'),
+    element: () => import('@/microservices/supply-chain/rfq-to-award/index'),
     metadata: {
       title: 'RFQ-to-Award Co-Pilot - Procurement Automation',
       description: 'AI-powered RFQ analysis, supplier evaluation, and automated award recommendations',
@@ -131,7 +131,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['forecast', 'demand', 'ml', 'analytics'],
     imageUrl: inventoryDashboardImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/supply-chain/demand-forecast'),
+    element: () => import('@/microservices/supply-chain/demand-forecast/index'),
     metadata: {
       title: 'Demand Forecast Review - Supply Chain Analytics',
       description: 'Machine learning powered demand forecasting and supply chain optimization',
@@ -153,7 +153,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['risk', 'supplier', 'monitoring', 'analytics'],
     imageUrl: supplyChainNetworkImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/supply-chain/supplier-risk'),
+    element: () => import('@/microservices/supply-chain/supplier-risk/index'),
     metadata: {
       title: 'Supplier Risk Monitor - Risk Management',
       description: 'Real-time supplier risk assessment with predictive analytics and monitoring',
@@ -175,7 +175,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['inventory', 'optimization', 'rebalancing', 'distribution'],
     imageUrl: inventoryDashboardImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/supply-chain/inventory-rebalancer'),
+    element: () => import('@/microservices/supply-chain/inventory-rebalancer/index'),
     metadata: {
       title: 'Inventory Rebalancer - Inventory Optimization',
       description: 'AI-powered inventory optimization and automated rebalancing across networks',
@@ -197,7 +197,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['orders', 'management', 'processing', 'chat'],
     imageUrl: supplyChainNetworkImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/supply-chain/order-management'),
+    element: () => import('@/microservices/supply-chain/order-management/index'),
     metadata: {
       title: 'Order Management Agent - Order Processing',
       description: 'AI-powered order processing and management with intelligent chat assistance',
@@ -221,7 +221,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['batch', 'release', 'quality', 'compliance'],
     imageUrl: pharmaLabImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/pharma/batch-release'),
+    element: () => import('@/microservices/pharma/batch-release/index'),
     metadata: {
       title: 'Batch Release Assistant - Pharmaceutical Quality',
       description: 'AI-powered batch release decisions with automated compliance validation',
@@ -243,7 +243,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['deviation', 'capa', 'quality', 'analysis'],
     imageUrl: pharmaLabImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/pharma/deviation-capa'),
+    element: () => import('@/microservices/pharma/deviation-capa/index'),
     metadata: {
       title: 'Deviation CAPA Summarizer - Quality Management',
       description: 'Automated deviation analysis and CAPA recommendations for pharmaceutical quality',
@@ -265,7 +265,7 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     tags: ['regulatory', 'dossier', 'compliance', 'documents'],
     imageUrl: pharmaLabImg,
     layout: { fullBleed: true, header: 'compact', padding: 'md' },
-    element: () => import('@/microservices/pharma/regulatory-dossier'),
+    element: () => import('@/microservices/pharma/regulatory-dossier/index'),
     metadata: {
       title: 'Regulatory Dossier Helper - Regulatory Compliance',
       description: 'AI-powered regulatory document preparation and compliance verification',
