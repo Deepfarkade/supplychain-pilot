@@ -59,8 +59,8 @@ export const AppShell: React.FC<AppShellProps> = ({
         
         {/* Content Container */}
         <div className={cn(
-          'relative z-10 mx-auto px-4',
-          maxWidthClasses[maxWidth]
+          'relative z-10',
+          maxWidth === 'full' ? 'w-full' : `mx-auto px-4 ${maxWidthClasses[maxWidth]}`
         )}>
           {children}
         </div>

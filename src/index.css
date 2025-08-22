@@ -5,38 +5,38 @@
 /* Enhanced Color Tokens and Layered Surface System */
 :root {
   /* Layered Surface System - Light Theme (Calm Enterprise) */
-  --background: 215 20% 97%;           /* surface-0: soft cool gray canvas */
-  --surface-1: 215 25% 99%;            /* surface-1: elevated cards */
-  --surface-2: 215 30% 96%;            /* surface-2: headers, rails */
+  --background: 215 15% 92%;           /* surface-0: soft cool gray canvas */
+  --surface-1: 215 20% 96%;            /* surface-1: elevated cards */
+  --surface-2: 215 25% 90%;            /* surface-2: headers, rails */
   
   --foreground: 222.2 84% 4.9%;
-  --card: 215 25% 99%;                 /* using surface-1 */
+  --card: 215 20% 96%;                 /* using surface-1 */
   --card-foreground: 222.2 84% 4.9%;
-  --popover: 215 25% 99%;
+  --popover: 215 20% 96%;
   --popover-foreground: 222.2 84% 4.9%;
   --primary: 47 100% 68%;
   --primary-foreground: 222.2 84% 4.9%;
-  --secondary: 215 25% 95%;            /* calm secondary */
+  --secondary: 215 20% 88%;            /* calm secondary */
   --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 215 20% 96%;                /* subtle muted */
+  --muted: 215 15% 88%;                /* subtle muted */
   --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 215 30% 94%;               /* gentle accent */
+  --accent: 215 25% 85%;               /* gentle accent */
   --accent-foreground: 222.2 84% 4.9%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
-  --border: 215 25% 90%;               /* subtle borders */
-  --input: 215 25% 95%;                /* input backgrounds */
+  --border: 215 20% 82%;               /* subtle borders */
+  --input: 215 20% 88%;                /* input backgrounds */
   --ring: 47 100% 68%;
   --radius: 0.5rem;
 
   /* Sidebar specific colors */
-  --sidebar-background: 215 25% 99%;
+  --sidebar-background: 215 20% 94%;
   --sidebar-foreground: 240 5.3% 26.1%;
   --sidebar-primary: 47 100% 68%;
   --sidebar-primary-foreground: 26 83.3% 14.1%;
-  --sidebar-accent: 215 30% 94%;
+  --sidebar-accent: 215 25% 85%;
   --sidebar-accent-foreground: 240 5.9% 10%;
-  --sidebar-border: 215 25% 90%;
+  --sidebar-border: 215 20% 82%;
   --sidebar-ring: 47 100% 68%;
 }
 

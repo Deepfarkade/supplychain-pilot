@@ -39,7 +39,7 @@ export function AppCard({ title, description, imageUrl, domain, slug, onExplore 
           <Button 
             variant="ghost" 
             size="sm" 
-            className="gap-2 text-accent hover:text-accent-foreground hover:bg-accent"
+            className="gap-2 text-primary hover:text-primary-foreground hover:bg-primary transition-all duration-200"
             onClick={handleExplore}
           >
             EXPLORE

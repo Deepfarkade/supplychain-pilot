@@ -30,13 +30,14 @@ import { useAuth } from '@/contexts/AuthContext'
 import { getAllMicroservices, getCategories } from '@/microservices/registry'
 import { AppCard } from '@/components/AppCard'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useSessionState } from '@/hooks/useSessionState'
 
 const Home = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [activeCategory, setActiveCategory] = useState('all')
+  const [searchQuery, setSearchQuery] = useSessionState('home-search', '')
+  const [activeCategory, setActiveCategory] = useSessionState('home-category', 'all')
   const { user, logout } = useAuth()
   
   const debouncedSearch = useDebounce(searchQuery, 300)
@@ -107,6 +108,7 @@ const Home = () => {
     <div className={`transition-opacity duration-300 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
       <AppShell 
         showPatterns={true}
+        maxWidth="full"
         headerContent={
           <PageHeader 
             title="SupplyChain AI Studio"
@@ -116,7 +118,7 @@ const Home = () => {
           />
         }
       >
-        <div className="flex">
+        <div className="flex min-h-[calc(100vh-120px)]">
           {/* Left Sidebar */}
           <div className="w-64 surface-1 border-r border-border/40 flex flex-col">
             {/* User Profile */}
@@ -134,26 +136,15 @@ const Home = () => {
 
             {/* User Info */}
             <div className="px-4 py-2 border-b border-border/30">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-foreground">{user?.name || 'User'}</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground hover:bg-accent"
-                    onClick={logout}
-                  >
-                    <LogOut className="w-3 h-3 mr-1" />
-                    Logout
-                  </Button>
-                </div>
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-foreground">{user?.name || 'User'}</span>
+              </div>
             </div>
 
             {/* Navigation */}
             <nav className="flex-1 p-3 space-y-1">
-              {sidebarItems.map((item, index) => (
+              {sidebarItems.slice(0, -3).map((item, index) => (
                 <button
                   key={index}
                   onClick={() => handleNavigation(item.path)}
@@ -172,11 +163,39 @@ const Home = () => {
                 </button>
               ))}
             </nav>
+
+            {/* Bottom Static Section */}
+            <div className="p-3 border-t border-border/30 space-y-1">
+              {/* Responsible AI, Raise Ticket, Feedback in same row */}
+              <div className="grid grid-cols-1 gap-1">
+                {sidebarItems.slice(-3).map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleNavigation(item.path)}
+                    disabled={isLoading}
+                    className="w-full flex items-center gap-2 px-2 py-2 rounded-md text-xs transition-all duration-200 text-foreground hover:bg-accent hover:text-accent-foreground"
+                  >
+                    <item.icon className="w-3 h-3 flex-shrink-0" />
+                    <span className="truncate">{item.label}</span>
+                  </button>
+                ))}
+              </div>
+              {/* Logout Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full h-8 text-xs text-muted-foreground hover:text-foreground hover:bg-accent justify-start gap-2"
+                onClick={logout}
+              >
+                <LogOut className="w-3 h-3" />
+                Logout
+              </Button>
+            </div>
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 p-8">
-            <div className="max-w-6xl mx-auto space-y-12">
+          <div className="flex-1 p-6">
+            <div className="space-y-8">
               
               {/* Category Tabs Rail */}
               <div className="animate-fade-in">

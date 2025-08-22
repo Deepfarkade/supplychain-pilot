@@ -10,6 +10,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { Loading } from '@/components/Loading';
 import { getAllMicroservices, getMicroservicesByDomain, searchMicroservices } from '@/microservices/registry';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useSessionState } from '@/hooks/useSessionState';
 
 // Import generated images
 import conversationalAgentsImg from '@/assets/conversational-agents.jpg'
@@ -51,8 +52,8 @@ const defaultDescriptions = {
 
 const AppStore = () => {
   const navigate = useNavigate()
-  const [searchQuery, setSearchQuery] = useState('')
-  const [activeTab, setActiveTab] = useState('general')
+  const [searchQuery, setSearchQuery] = useSessionState('appstore-search', '')
+  const [activeTab, setActiveTab] = useSessionState('appstore-tab', 'general')
   const [isLoading, setIsLoading] = useState(false)
   
   // Debounce search to improve performance
