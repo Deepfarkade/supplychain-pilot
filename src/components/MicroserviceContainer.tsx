@@ -1,40 +1,44 @@
 /**
- * Production-grade microservice container with lazy loading and error boundaries
+ * Production-grade microservice container - Simplified version for debugging
  */
 
-import React, { Suspense, memo, useMemo } from 'react';
+import React, { Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMicroservice } from '@/microservices/registry';
 import { MicroserviceShell } from '@/components/MicroserviceShell';
 import { MicroservicePageSkeleton } from '@/components/ui/skeleton';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
+// Direct imports for now to debug the issue
+import ConversationalAgents from '@/microservices/general/conversational-agents/index';
+import DirectGPT from '@/microservices/general/direct-gpt/index';
+import DocumentComparer from '@/microservices/general/document-comparer/index';
+import RFQToAward from '@/microservices/supply-chain/rfq-to-award/index';
+import DemandForecast from '@/microservices/supply-chain/demand-forecast/index';
+import SupplierRisk from '@/microservices/supply-chain/supplier-risk/index';
+import InventoryRebalancer from '@/microservices/supply-chain/inventory-rebalancer/index';
+import OrderManagement from '@/microservices/supply-chain/order-management/index';
+import BatchRelease from '@/microservices/pharma/batch-release/index';
+import DeviationCAPA from '@/microservices/pharma/deviation-capa/index';
+import RegulatoryDossier from '@/microservices/pharma/regulatory-dossier/index';
+
+// Component mapping
+const componentMap: Record<string, React.ComponentType> = {
+  'general/conversational-agents': ConversationalAgents,
+  'general/direct-gpt': DirectGPT,
+  'general/document-comparer': DocumentComparer,
+  'supply-chain/rfq-to-award': RFQToAward,
+  'supply-chain/demand-forecast': DemandForecast,
+  'supply-chain/supplier-risk': SupplierRisk,
+  'supply-chain/inventory-rebalancer': InventoryRebalancer,
+  'supply-chain/order-management': OrderManagement,
+  'pharma/batch-release': BatchRelease,
+  'pharma/deviation-capa': DeviationCAPA,
+  'pharma/regulatory-dossier': RegulatoryDossier,
+};
+
 /**
- * Lazy component loader with error handling
- */
-const LazyMicroserviceLoader: React.FC<{ domain: string; slug: string }> = memo(({ domain, slug }) => {
-  const microservice = getMicroservice(domain, slug);
-  
-  if (!microservice) {
-    throw new Error(`Microservice ${domain}/${slug} not found in registry`);
-  }
-
-  if (!microservice.element) {
-    throw new Error(`Microservice ${domain}/${slug} has no element function defined`);
-  }
-
-  // Create lazy component directly from the import function
-  const LazyComponent = useMemo(() => {
-    return React.lazy(() => microservice.element!());
-  }, [microservice.element]);
-
-  return <LazyComponent />;
-});
-
-LazyMicroserviceLoader.displayName = 'LazyMicroserviceLoader';
-
-/**
- * Main microservice container with production-grade features
+ * Main microservice container with direct imports
  */
 export const MicroserviceContainer: React.FC = () => {
   const { domain, slug } = useParams<{ domain: string; slug: string }>();
@@ -47,9 +51,11 @@ export const MicroserviceContainer: React.FC = () => {
   }
 
   const microservice = getMicroservice(domain, slug);
+  const componentKey = `${domain}/${slug}`;
+  const Component = componentMap[componentKey];
 
   // Handle microservice not found
-  if (!microservice) {
+  if (!microservice || !Component) {
     return (
       <MicroserviceShell
         title="Service Not Found"
@@ -61,16 +67,14 @@ export const MicroserviceContainer: React.FC = () => {
             <p className="text-muted-foreground">
               This microservice is not available or hasn't been implemented yet.
             </p>
+            <p className="text-sm text-muted-foreground">
+              Component key: {componentKey}
+            </p>
           </div>
         </div>
       </MicroserviceShell>
     );
   }
-
-  const breadcrumbs = [
-    { label: microservice.domain.charAt(0).toUpperCase() + microservice.domain.slice(1).replace('-', ' ') },
-    { label: microservice.name }
-  ];
 
   return (
     <ErrorBoundary
@@ -83,14 +87,13 @@ export const MicroserviceContainer: React.FC = () => {
           title={microservice.name}
           description={microservice.description}
           icon={microservice.icon}
-          breadcrumbs={breadcrumbs}
           layout={microservice.layout}
           metadata={microservice.metadata}
         >
           <MicroservicePageSkeleton />
         </MicroserviceShell>
       }>
-        <LazyMicroserviceLoader domain={domain} slug={slug} />
+        <Component />
       </Suspense>
     </ErrorBoundary>
   );
