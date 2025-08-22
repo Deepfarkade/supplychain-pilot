@@ -3,6 +3,8 @@
  */
 
 import { sanitizeInput } from '@/utils/security';
+import { securityService } from './security';
+import { apiConfig } from '@/config/api';
 
 interface ApiConfig {
   baseUrl: string;
@@ -26,10 +28,12 @@ class ApiClient {
   private config: ApiConfig;
   
   constructor(config: Partial<ApiConfig> = {}) {
+    // Use centralized configuration
+    const centralizedConfig = apiConfig.getConfig();
     this.config = {
-      baseUrl: import.meta.env.VITE_API_BASE_URL || '/api',
-      timeout: 10000,
-      retries: 3,
+      baseUrl: centralizedConfig.baseUrl,
+      timeout: centralizedConfig.timeout,
+      retries: centralizedConfig.retries,
       ...config
     };
   }
@@ -43,11 +47,16 @@ class ApiClient {
   ): Promise<T> {
     const { timeout = this.config.timeout, retries = this.config.retries, ...fetchOptions } = options;
     
-    const url = `${this.config.baseUrl}${endpoint}`;
+    // Use endpoint resolution if it's a relative path
+    const url = endpoint.startsWith('http') ? endpoint : `${this.config.baseUrl}${endpoint}`;
     
-    // Add default headers
+    // Secure the request using security service
+    const securedRequest = await securityService.secureRequest(url, fetchOptions.body);
+    
+    // Merge secured headers with default headers
     const headers = {
       'Content-Type': 'application/json',
+      ...securedRequest.headers,
       ...fetchOptions.headers,
     };
     
@@ -56,6 +65,9 @@ class ApiClient {
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
+    
+    // Use secured data
+    fetchOptions.body = securedRequest.data ? JSON.stringify(securedRequest.data) : fetchOptions.body;
     
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -68,6 +80,9 @@ class ApiClient {
       });
       
       clearTimeout(timeoutId);
+      
+      // Validate response security
+      await securityService.validateResponse(response);
       
       if (!response.ok) {
         throw new ApiError({
