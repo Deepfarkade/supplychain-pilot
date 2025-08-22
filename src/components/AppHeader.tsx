@@ -15,6 +15,8 @@ import {
   Package
 } from 'lucide-react'
 import { useTheme } from '@/components/ThemeProvider'
+import { useAuth } from '@/contexts/AuthContext'
+import { NotificationPanel } from '@/components/NotificationPanel'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +28,7 @@ export function AppHeader() {
   const navigate = useNavigate()
   const location = useLocation()
   const { theme, setTheme } = useTheme()
+  const { user } = useAuth()
 
   const apps = [
     'Conversational Agents',
@@ -137,6 +140,26 @@ export function AppHeader() {
           <Button variant="ghost" size="sm">
             <HelpCircle className="w-4 h-4" />
           </Button>
+
+          {/* Notifications */}
+          <NotificationPanel />
+
+          {/* User Avatar */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-medium">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <span className="text-sm">{user?.name || 'User'}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onClick={() => navigate('/settings')}>
+                Settings
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

@@ -26,7 +26,7 @@ import { PageHeader } from '@/components/PageHeader'
 import { Loading } from '@/components/Loading'
 import { useAuth } from '@/contexts/AuthContext'
 import { getAllMicroservices } from '@/microservices/registry'
-import { NotificationPanel } from '@/components/NotificationPanel'
+
 
 const Home = () => {
   const navigate = useNavigate()
@@ -113,14 +113,6 @@ const Home = () => {
                     {user?.email || 'user@company.com'}
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Notifications */}
-            <div className="px-4 py-3 border-b border-border/30">
-              <div className="flex items-center gap-2">
-                <NotificationPanel />
-                <span className="text-sm text-foreground">Notifications</span>
               </div>
             </div>
 
