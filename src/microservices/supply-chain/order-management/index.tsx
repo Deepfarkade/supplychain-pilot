@@ -30,8 +30,8 @@ const OrderManagement: React.FC = () => {
           <Badge variant="secondary">Chat Assistant</Badge>
         </div>
 
-        <div className="max-w-6xl mx-auto space-y-6">
-          <Card>
+        <div className="w-full space-y-6">
+          <Card className="w-full">
             <CardHeader>
               <CardTitle>Order Management Chat Assistant</CardTitle>
             </CardHeader>
@@ -41,8 +41,8 @@ const OrderManagement: React.FC = () => {
                   Interact with our AI-powered order management system to process orders, track shipments, and manage your supply chain operations efficiently.
                 </p>
                 
-                {/* Chat iframe with same dimensions as RFQ upload box */}
-                <div className="border rounded-lg overflow-hidden" style={{ height: '600px' }}>
+                {/* Large embedded iframe utilizing full space */}
+                <div className="border rounded-lg overflow-hidden w-full" style={{ height: '85vh', minHeight: '800px' }}>
                   <iframe
                     src="https://geni-ai-supply-chain-decisioning.wonderfulbush-77ea8b18.centralindia.azurecontainerapps.io/"
                     className="w-full h-full border-0"

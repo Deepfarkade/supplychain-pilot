@@ -46,8 +46,8 @@ const RFQToAward: React.FC = () => {
           <Badge variant="secondary">RFQ Analysis</Badge>
         </div>
 
-        <div className="max-w-6xl mx-auto space-y-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <div className="w-full space-y-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 w-full">
             <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 h-12">
               <TabsTrigger value="upload" className="gap-2">
                 <Upload className="h-4 w-4" />

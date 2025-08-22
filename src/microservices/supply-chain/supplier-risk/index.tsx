@@ -26,7 +26,7 @@ const SupplierRisk: React.FC = () => {
         description: 'Real-time supplier risk assessment with predictive analytics and monitoring'
       }}
     >
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex gap-2">
           <Badge variant="secondary">Risk Management</Badge>
           <Badge variant="secondary">Monitoring</Badge>

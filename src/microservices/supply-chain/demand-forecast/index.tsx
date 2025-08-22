@@ -26,7 +26,7 @@ const DemandForecast: React.FC = () => {
         description: 'Machine learning powered demand forecasting and supply chain optimization'
       }}
     >
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex gap-2">
           <Badge variant="secondary">Analytics</Badge>
           <Badge variant="secondary">Forecasting</Badge>

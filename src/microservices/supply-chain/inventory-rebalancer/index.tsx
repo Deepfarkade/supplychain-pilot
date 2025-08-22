@@ -26,7 +26,7 @@ const InventoryRebalancer: React.FC = () => {
         description: 'AI-powered inventory optimization and automated rebalancing across networks'
       }}
     >
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex gap-2">
           <Badge variant="secondary">Inventory</Badge>
           <Badge variant="secondary">Optimization</Badge>

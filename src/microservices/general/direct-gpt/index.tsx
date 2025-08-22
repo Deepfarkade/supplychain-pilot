@@ -26,7 +26,7 @@ const DirectGPT: React.FC = () => {
         description: 'Explore Azure OpenAI models with interactive playground interface'
       }}
     >
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex gap-2">
           <Badge variant="secondary">AI Models</Badge>
           <Badge variant="secondary">Azure OpenAI</Badge>

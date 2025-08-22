@@ -26,7 +26,7 @@ const DeviationCAPA: React.FC = () => {
         description: 'Automated deviation analysis and CAPA recommendations for pharmaceutical quality'
       }}
     >
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex gap-2">
           <Badge variant="secondary">Quality</Badge>
           <Badge variant="secondary">Deviation Analysis</Badge>

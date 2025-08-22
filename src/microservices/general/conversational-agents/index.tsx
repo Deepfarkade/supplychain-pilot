@@ -59,8 +59,8 @@ const ConversationalAgents: React.FC = () => {
           <Badge variant="secondary">Translation</Badge>
         </div>
 
-        <div className="max-w-4xl mx-auto space-y-6">
-          <Card className="h-[600px] flex flex-col">
+        <div className="w-full space-y-6">
+          <Card className="w-full max-w-4xl mx-auto h-[85vh] min-h-[800px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Bot className="h-5 w-5" />

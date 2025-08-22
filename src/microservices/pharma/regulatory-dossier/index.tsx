@@ -26,7 +26,7 @@ const RegulatoryDossier: React.FC = () => {
         description: 'AI-powered regulatory document preparation and compliance verification'
       }}
     >
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex gap-2">
           <Badge variant="secondary">Regulatory</Badge>
           <Badge variant="secondary">Dossier</Badge>

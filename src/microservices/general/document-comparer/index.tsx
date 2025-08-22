@@ -26,7 +26,7 @@ const DocumentComparer: React.FC = () => {
         description: 'AI-powered document comparison and knowledge base Q&A system'
       }}
     >
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex gap-2">
           <Badge variant="secondary">Document AI</Badge>
           <Badge variant="secondary">Analysis</Badge>

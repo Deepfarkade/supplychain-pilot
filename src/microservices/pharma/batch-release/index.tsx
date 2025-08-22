@@ -26,7 +26,7 @@ const BatchRelease: React.FC = () => {
         description: 'AI-powered batch release decisions with automated compliance validation'
       }}
     >
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <div className="flex gap-2">
           <Badge variant="secondary">Quality</Badge>
           <Badge variant="secondary">Batch Release</Badge>
