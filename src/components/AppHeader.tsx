@@ -21,18 +21,8 @@ import {
 import NotificationPanel from '@/components/NotificationPanel'
 
 export function AppHeader() {
-  // Safely get navigation hooks with error handling
-  let navigate: ReturnType<typeof useNavigate> | null = null;
-  let location: ReturnType<typeof useLocation> | null = null;
-  
-  try {
-    navigate = useNavigate();
-    location = useLocation();
-  } catch (error) {
-    // Router context not available, fallback to window.location
-    console.warn('Router context not available in AppHeader');
-  }
-
+  const navigate = useNavigate()
+  const location = useLocation()
   const { theme, setTheme } = useTheme()
 
   const apps = [
@@ -58,22 +48,7 @@ export function AppHeader() {
     { icon: Bot, label: 'Agent Configuration', path: '/agents' }
   ]
 
-  const handleNavigation = (path: string) => {
-    if (navigate) {
-      navigate(path);
-    } else {
-      // Fallback to window.location
-      window.location.href = path;
-    }
-  };
-
-  const isActive = (path: string) => {
-    if (location) {
-      return location.pathname === path;
-    }
-    // Fallback to window.location
-    return window.location.pathname === path;
-  };
+  const isActive = (path: string) => location.pathname === path
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -95,7 +70,7 @@ export function AppHeader() {
                 key={item.path}
                 variant={isActive(item.path) ? "default" : "ghost"}
                 size="sm"
-                onClick={() => handleNavigation(item.path)}
+                onClick={() => navigate(item.path)}
                 className={`flex items-center gap-2 transition-all duration-200 hover:scale-105 ${
                   isActive(item.path) 
                     ? 'bg-primary text-primary-foreground shadow-sm' 

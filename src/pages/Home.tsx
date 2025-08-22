@@ -21,7 +21,7 @@ import {
   Award
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { AppShell } from '@/components/AppShell'
+import { AppLayout } from '@/components/AppLayout'
 import { PageHeader } from '@/components/PageHeader'
 import { Loading } from '@/components/Loading'
 import { useAuth } from '@/contexts/AuthContext'
@@ -70,7 +70,7 @@ const Home = () => {
 
   return (
     <div className={`transition-opacity duration-300 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
-      <AppShell 
+      <AppLayout 
         showPatterns={true}
         maxWidth="full"
         headerContent={
@@ -255,7 +255,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </AppShell>
+      </AppLayout>
     </div>
   )
 }
