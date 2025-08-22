@@ -1,9 +1,10 @@
 /**
- * AppShell - Content wrapper without header
- * Provides consistent structure for page content
+ * AppShell - Enterprise layout wrapper with layered surfaces
+ * Provides consistent structure across all pages with subtle visual hierarchy
  */
 
 import React from 'react';
+import { AppHeader } from '@/components/AppHeader';
 import { cn } from '@/lib/utils';
 
 interface AppShellProps {
@@ -33,7 +34,10 @@ export const AppShell: React.FC<AppShellProps> = ({
   };
 
   return (
-    <div className={cn('min-h-screen surface-0', className)}>      
+    <div className={cn('min-h-screen surface-0', className)}>
+      {/* Global App Header */}
+      <AppHeader />
+      
       {/* Page Header Band (if content provided) */}
       {headerContent && (
         <div className="surface-2 border-b border-border/50">

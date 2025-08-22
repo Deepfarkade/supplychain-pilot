@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Search, Grid3X3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AppCard } from '@/components/AppCard';
-import { AppLayout } from '@/components/AppLayout';
+import { AppShell } from '@/components/AppShell';
 import { PageHeader } from '@/components/PageHeader';
 import { Loading } from '@/components/Loading';
 import { getAllMicroservices, getMicroservicesByDomain, searchMicroservices } from '@/microservices/registry';
@@ -138,13 +138,13 @@ const AppStore = () => {
   }
 
   return (
-    <AppLayout 
-      showPatterns={true}
+    <AppShell 
       headerContent={
         <PageHeader 
           title="Application Store"
-          subtitle="Discover and deploy AI-powered microservices for your supply chain operations"
+          subtitle="Discover and deploy AI-powered applications for your supply chain operations"
           icon={Grid3X3}
+          variant="compact"
         />
       }
     >
@@ -271,7 +271,7 @@ const AppStore = () => {
           )}
         </Tabs>
       </div>
-    </AppLayout>
+    </AppShell>
   )
 }
 

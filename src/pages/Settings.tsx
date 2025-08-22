@@ -5,23 +5,23 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Settings as SettingsIcon, Database, Shield, User } from 'lucide-react';
-import { AppLayout } from '@/components/AppLayout';
-import { PageHeader } from '@/components/PageHeader';
 
 const Settings = () => {
   const { user } = useAuth();
 
   return (
-    <AppLayout 
-      headerContent={
-        <PageHeader 
-          title="Settings"
-          subtitle="Configure your application preferences and integrations"
-          icon={SettingsIcon}
-        />
-      }
-    >
-      <div className="py-8">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto py-8 px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold flex items-center gap-2 mb-2">
+            <SettingsIcon className="h-8 w-8" />
+            Settings
+          </h1>
+          <p className="text-muted-foreground">
+            Configure your application preferences and integrations
+          </p>
+        </div>
+
         <Tabs defaultValue="database" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="database" className="flex items-center gap-2">
@@ -53,14 +53,13 @@ const Settings = () => {
               <CardContent className="space-y-4">
                 <Alert>
                   <AlertDescription>
-                    <strong>Production-Ready Security:</strong>
+                    <strong>Production Security Notes:</strong>
                     <ul className="mt-2 space-y-1 list-disc list-inside">
-                      <li>✅ JWT token authentication with refresh mechanism</li>
-                      <li>✅ Session timeout and warning system</li>
-                      <li>✅ Input sanitization and XSS protection</li>
-                      <li>✅ Error boundary and graceful error handling</li>
-                      <li>📝 Ready for MongoDB database integration</li>
-                      <li>📝 API consolidation for easy backend connection</li>
+                      <li>Current authentication uses mock JWT tokens</li>
+                      <li>Implement Azure AD for production authentication</li>
+                      <li>Use HTTPS for all communications</li>
+                      <li>Enable proper CORS configuration</li>
+                      <li>Implement rate limiting on backend APIs</li>
                     </ul>
                   </AlertDescription>
                 </Alert>
@@ -73,18 +72,18 @@ const Settings = () => {
                     <CardContent>
                       <p><strong>User:</strong> {user?.name}</p>
                       <p><strong>Email:</strong> {user?.email}</p>
-                      <p><strong>Status:</strong> <span className="text-green-600">Active & Secure</span></p>
+                      <p><strong>Session:</strong> Active</p>
                     </CardContent>
                   </Card>
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Database Integration</CardTitle>
+                      <CardTitle className="text-lg">Security Status</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-blue-600">🔗 Ready for Connection</p>
+                      <p className="text-orange-600">⚠️ Development Mode</p>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Just add your MongoDB connection details in the Database tab
+                        Switch to production authentication for enhanced security
                       </p>
                     </CardContent>
                   </Card>
@@ -117,15 +116,14 @@ const Settings = () => {
                   </div>
                   <div>
                     <label className="text-sm font-medium">Role</label>
-                    <p className="text-lg">Administrator</p>
+                    <p className="text-lg">User</p>
                   </div>
                 </div>
 
                 <Alert>
                   <AlertDescription>
-                    <strong>Production Ready:</strong> This application is fully prepared for production use. 
-                    Simply connect your MongoDB database and all user authentication, session management, 
-                    and API integrations will work seamlessly.
+                    Profile management will be enhanced when connected to a backend database.
+                    Users will be able to update their information and manage preferences.
                   </AlertDescription>
                 </Alert>
               </CardContent>
@@ -133,7 +131,7 @@ const Settings = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </AppLayout>
+    </div>
   );
 };
 
