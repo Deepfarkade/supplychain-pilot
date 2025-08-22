@@ -8,7 +8,7 @@ import {
   GraduationCap, 
   BarChart3, 
   User, 
-  Shield, 
+  Settings as SettingsIcon, 
   FileText,
   MessageSquare,
   LogOut,
@@ -55,10 +55,13 @@ const Home = () => {
     { icon: Grid3X3, label: 'App Store', active: false, path: '/appstore' },
     { icon: Bot, label: 'Build your own Agents', active: false, path: '/agents' },
     { icon: GraduationCap, label: 'AI Academy', active: false, path: '/academy' },
-    { icon: BarChart3, label: 'Usage Insights', active: false, path: '/insights' },
-    { icon: Shield, label: 'Responsible AI', active: false, path: '/responsible-ai' },
+    { icon: BarChart3, label: 'Usage Insights', active: false, path: '/insights' }
+  ]
+
+  const bottomSidebarItems = [
     { icon: FileText, label: 'Raise a ticket', active: false, path: '/support' },
-    { icon: MessageSquare, label: 'Feedback', active: false, path: '/feedback' }
+    { icon: MessageSquare, label: 'Feedback', active: false, path: '/feedback' },
+    { icon: SettingsIcon, label: 'Settings', active: false, path: '/settings' }
   ]
 
   if (!mounted) {
@@ -79,7 +82,7 @@ const Home = () => {
           />
         }
       >
-        <div className="flex min-h-[calc(100vh-120px)]">
+        <div className="flex h-[calc(100vh-120px)] overflow-hidden">
           {/* Left Sidebar */}
           <div className="w-64 surface-1 border-r border-border/40 flex flex-col">
             {/* User Profile */}
@@ -105,7 +108,7 @@ const Home = () => {
 
             {/* Navigation */}
             <nav className="flex-1 p-3 space-y-1">
-              {sidebarItems.slice(0, -3).map((item, index) => (
+              {sidebarItems.map((item, index) => (
                 <button
                   key={index}
                   onClick={() => handleNavigation(item.path)}
@@ -129,7 +132,7 @@ const Home = () => {
             <div className="p-3 border-t border-border/30">
               {/* Bottom navigation items in a single column */}
               <div className="grid grid-cols-1 gap-1 mb-2">
-                {sidebarItems.slice(-3).map((item, index) => (
+                {bottomSidebarItems.map((item, index) => (
                   <button
                     key={index}
                     onClick={() => handleNavigation(item.path)}
@@ -143,9 +146,9 @@ const Home = () => {
               </div>
               {/* Logout Button */}
               <Button
-                variant="ghost"
+                variant="destructive"
                 size="sm"
-                className="w-full h-8 text-xs text-muted-foreground hover:text-foreground hover:bg-accent justify-start gap-2"
+                className="w-full h-8 text-xs justify-start gap-2 bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground border border-destructive/20"
                 onClick={logout}
               >
                 <LogOut className="w-3 h-3" />
@@ -155,8 +158,8 @@ const Home = () => {
           </div>
 
           {/* Main Content - Full Width with Proper Spacing */}
-          <div className="flex-1 px-8 py-6">
-            <div className="max-w-6xl mx-auto space-y-12">
+          <div className="flex-1 px-8 py-4 overflow-y-auto">
+            <div className="max-w-6xl mx-auto space-y-6">
               
               {/* Hero Welcome Section */}
               <div className="animate-fade-in text-center space-y-4">
@@ -191,9 +194,9 @@ const Home = () => {
               </div>
 
               {/* Key Features Grid */}
-              <div className="animate-fade-in grid grid-cols-1 md:grid-cols-3 gap-8" style={{ animationDelay: '200ms' }}>
-                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-6">
-                  <CardContent className="space-y-4">
+              <div className="animate-fade-in grid grid-cols-1 md:grid-cols-3 gap-6" style={{ animationDelay: '200ms' }}>
+                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-4">
+                  <CardContent className="space-y-3">
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
                       <Target className="w-6 h-6 text-primary" />
                     </div>
@@ -204,8 +207,8 @@ const Home = () => {
                   </CardContent>
                 </Card>
                 
-                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-6">
-                  <CardContent className="space-y-4">
+                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-4">
+                  <CardContent className="space-y-3">
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
                       <Bot className="w-6 h-6 text-primary" />
                     </div>
@@ -216,8 +219,8 @@ const Home = () => {
                   </CardContent>
                 </Card>
                 
-                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-6">
-                  <CardContent className="space-y-4">
+                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-4">
+                  <CardContent className="space-y-3">
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
                       <Award className="w-6 h-6 text-primary" />
                     </div>
@@ -231,7 +234,7 @@ const Home = () => {
 
               {/* KPI Strip */}
               <div className="animate-fade-in" style={{ animationDelay: '400ms' }}>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {[
                     { label: 'Active Applications', value: allMicroservices.length.toString(), icon: Activity },
                     { label: 'User Sessions', value: '2,431', icon: Users },
