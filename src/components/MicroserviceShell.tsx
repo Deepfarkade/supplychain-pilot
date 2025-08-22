@@ -110,7 +110,7 @@ const MicroserviceShell: React.FC<MicroserviceShellProps> = memo(({
 
   return (
     <div className={cn(
-      'min-h-screen',
+      'min-h-screen surface-0',
       backgroundClasses[background]
     )}>
       {/* App Header */}
@@ -118,11 +118,11 @@ const MicroserviceShell: React.FC<MicroserviceShellProps> = memo(({
       
       {/* Page Header */}
       <div className={cn(
-        'border-b border-border/50',
+        'surface-2 border-b border-border/40',
         headerClasses[header]
       )}>
         <div className={cn(
-          'w-full px-2 sm:px-4', // Minimal side padding, full width
+          'w-full px-2 sm:px-4 max-w-7xl mx-auto', // Centered with responsive padding
           paddingClasses[padding] !== 'none' && 'py-4'
         )}>
           {/* Breadcrumbs */}
@@ -156,7 +156,7 @@ const MicroserviceShell: React.FC<MicroserviceShellProps> = memo(({
                 variant="ghost"
                 size="sm"
                 onClick={handleBack}
-                className="gap-2 hover:bg-accent/50 transition-colors"
+                className="gap-2 hover:bg-accent transition-colors"
                 aria-label="Go back to App Store"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -197,13 +197,26 @@ const MicroserviceShell: React.FC<MicroserviceShellProps> = memo(({
         </div>
       </div>
 
-      {/* Main Content Area - Production optimized for maximum space */}
+      {/* Main Content Area - Full-bleed with subtle background */}
       <main className={cn(
-        'flex-1 w-full',
-        paddingClasses[padding] === '' ? 'px-1 sm:px-2' : paddingClasses[padding], // Minimal side padding for max space
+        'flex-1 w-full relative',
+        paddingClasses[padding] === '' ? 'px-1 sm:px-2' : paddingClasses[padding],
         'max-w-none' // Full width utilization
       )}>
-        {children}
+        {/* Subtle background pattern for non-fullBleed layouts */}
+        {!fullBleed && (
+          <>
+            <div className="absolute inset-0 network-pattern" />
+            <div className="absolute inset-0 dotted-pattern" />
+          </>
+        )}
+        
+        <div className={cn(
+          'relative z-10',
+          fullBleed ? 'h-full' : 'py-4'
+        )}>
+          {children}
+        </div>
       </main>
     </div>
   );

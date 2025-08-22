@@ -2,181 +2,189 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Supply Chain Co-Pilot Design System - Calm Enterprise Aesthetic */
+/* Enhanced Color Tokens and Layered Surface System */
+:root {
+  /* Layered Surface System - Light Theme (Calm Enterprise) */
+  --background: 215 20% 97%;           /* surface-0: soft cool gray canvas */
+  --surface-1: 215 25% 99%;            /* surface-1: elevated cards */
+  --surface-2: 215 30% 96%;            /* surface-2: headers, rails */
+  
+  --foreground: 222.2 84% 4.9%;
+  --card: 215 25% 99%;                 /* using surface-1 */
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 215 25% 99%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 47 100% 68%;
+  --primary-foreground: 222.2 84% 4.9%;
+  --secondary: 215 25% 95%;            /* calm secondary */
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 215 20% 96%;                /* subtle muted */
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 215 30% 94%;               /* gentle accent */
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 215 25% 90%;               /* subtle borders */
+  --input: 215 25% 95%;                /* input backgrounds */
+  --ring: 47 100% 68%;
+  --radius: 0.5rem;
 
-@layer base {
-  :root {
-    /* Light Mode Tokens - All HSL Values */
-    --background: 210 20% 98%; /* Clean white background */
-    --foreground: 222.2 84% 4.9%; /* Dark text */
-    --card: 0 0% 100%; /* Pure white cards */
-    --card-foreground: 222.2 84% 4.9%; /* Dark text on cards */
-    --popover: 0 0% 100%; /* White popover */
-    --popover-foreground: 222.2 84% 4.9%; /* Dark text in popover */
-    --primary: 47.9 95.8% 53.1%; /* Clean yellow/amber primary */
-    --primary-foreground: 26 83.3% 14.1%; /* Dark text on primary */
-    --secondary: 210 40% 96%; /* Light gray secondary */
-    --secondary-foreground: 222.2 84% 4.9%; /* Dark text on secondary */
-    --muted: 210 40% 96%; /* Light muted background */
-    --muted-foreground: 215.4 16.3% 46.9%; /* Muted text */
-    --border: 214.3 31.8% 91.4%; /* Light border */
-    --input: 214.3 31.8% 91.4%; /* Input border */
-    --ring: 47.9 95.8% 53.1%; /* Focus ring same as primary */
-    --radius: 12px;
+  /* Sidebar specific colors */
+  --sidebar-background: 215 25% 99%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 47 100% 68%;
+  --sidebar-primary-foreground: 26 83.3% 14.1%;
+  --sidebar-accent: 215 30% 94%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 215 25% 90%;
+  --sidebar-ring: 47 100% 68%;
+}
 
-    /* Sidebar specific colors */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 47.9 95.8% 53.1%; /* Yellow for active items */
-    --sidebar-primary-foreground: 26 83.3% 14.1%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 47.9 95.8% 53.1%;
-  }
+.dark {
+  /* Layered Surface System - Dark Theme (Calm Enterprise) */
+  --background: 222.2 84% 4.9%;        /* surface-0: deep canvas */
+  --surface-1: 222.2 70% 6.5%;         /* surface-1: elevated cards */
+  --surface-2: 222.2 60% 8%;           /* surface-2: headers, rails */
+  
+  --foreground: 210 40% 98%;
+  --card: 222.2 70% 6.5%;              /* using surface-1 */
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 70% 6.5%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 47 100% 68%;
+  --primary-foreground: 222.2 84% 4.9%;
+  --secondary: 222.2 60% 12%;          /* calm secondary */
+  --secondary-foreground: 210 40% 98%;
+  --muted: 222.2 50% 10%;              /* subtle muted */
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 222.2 55% 14%;             /* gentle accent */
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 222.2 60% 15%;             /* subtle borders */
+  --input: 222.2 60% 12%;              /* input backgrounds */
+  --ring: 47 100% 68%;
 
-  .dark {
-    /* Dark Mode Tokens - All HSL Values */
-    --background: 222.2 84% 4.9%; /* Dark background */
-    --foreground: 210 40% 98%; /* Light text */
-    --card: 222.2 84% 4.9%; /* Dark card background */
-    --card-foreground: 210 40% 98%; /* Light text on cards */
-    --popover: 222.2 84% 4.9%; /* Dark popover */
-    --popover-foreground: 210 40% 98%; /* Light text in popover */
-    --primary: 47.9 95.8% 53.1%; /* Same yellow/amber primary */
-    --primary-foreground: 26 83.3% 14.1%; /* Dark text on primary */
-    --secondary: 217.2 32.6% 17.5%; /* Dark secondary */
-    --secondary-foreground: 210 40% 98%; /* Light text on secondary */
-    --muted: 217.2 32.6% 17.5%; /* Dark muted background */
-    --muted-foreground: 215 20.2% 65.1%; /* Muted text */
-    --border: 217.2 32.6% 17.5%; /* Dark border */
-    --input: 217.2 32.6% 17.5%; /* Input border */
-    --ring: 47.9 95.8% 53.1%; /* Focus ring same as primary */
-
-    /* Sidebar specific colors for dark mode */
-    --sidebar-background: 222.2 84% 4.9%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 47.9 95.8% 53.1%; /* Yellow for active items */
-    --sidebar-primary-foreground: 26 83.3% 14.1%;
-    --sidebar-accent: 217.2 32.6% 17.5%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 47.9 95.8% 53.1%;
-  }
+  /* Sidebar dark mode */
+  --sidebar-background: 222.2 70% 6.5%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-primary: 47 100% 68%;
+  --sidebar-primary-foreground: 26 83.3% 14.1%;
+  --sidebar-accent: 222.2 55% 14%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-border: 222.2 60% 15%;
+  --sidebar-ring: 47 100% 68%;
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-
+  
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-  
-  /* Enterprise-grade focus rings */
-  *:focus-visible {
-    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+    @apply bg-background text-foreground;
   }
 }
 
-@layer components {
-  /* Enterprise Card Variants */
-  .card-elevated {
-    box-shadow: var(--shadow-elevation);
-    @apply transition-all duration-200 hover:scale-[1.02];
-  }
-  
-  .card-hover {
-    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
-  }
-  
-  /* Smooth Animations */
-  .animate-fade-in {
-    animation: fadeIn 0.3s ease-out;
-  }
-  
-  .animate-slide-up {
-    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  /* Network/Globe Background Pattern */
-  .network-pattern {
-    background-image: 
-      radial-gradient(circle at 20% 50%, hsl(var(--primary) / 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, hsl(var(--primary) / 0.03) 0%, transparent 50%),
-      radial-gradient(circle at 40% 80%, hsl(var(--primary) / 0.02) 0%, transparent 50%);
-  }
-  
-  .dotted-pattern {
-    background-image: radial-gradient(circle, hsl(var(--muted-foreground) / 0.15) 1px, transparent 1px);
-    background-size: 20px 20px;
-  }
+/* Enhanced Surface System and Component Variants */
+.surface-0 {
+  @apply bg-background;
 }
 
-@layer utilities {
-/* Login page animations */
-@keyframes blob {
+.surface-1 {
+  @apply bg-[hsl(var(--surface-1))];
+}
+
+.surface-2 {
+  @apply bg-[hsl(var(--surface-2))];
+}
+
+.card-elevated {
+  @apply surface-1 backdrop-blur-sm shadow-soft border border-border/40 transition-all duration-300 hover:shadow-elevated hover:border-border/60;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-soft;
+}
+
+.animate-fade-in {
+  @apply animate-[fade-in_0.6s_ease-out];
+}
+
+.animate-slide-up {
+  @apply animate-[slide-up_0.6s_ease-out];
+}
+
+/* Enhanced patterns for calm visual texture */
+.network-pattern {
+  background-image: 
+    radial-gradient(circle at 1px 1px, hsl(var(--muted-foreground)) 1px, transparent 0);
+  background-size: 24px 24px;
+  opacity: 0.03;  /* Much more subtle */
+}
+
+.dotted-pattern {
+  background-image: 
+    radial-gradient(circle, hsl(var(--muted-foreground)) 0.5px, transparent 0.5px);
+  background-size: 20px 20px;
+  opacity: 0.02;  /* Very subtle */
+}
+
+.grid-pattern {
+  background-image: 
+    linear-gradient(hsl(var(--muted-foreground)) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--muted-foreground)) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.02;
+}
+
+/* Animations */
+@keyframes fade-in {
   0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
+    opacity: 0;
+    transform: translateY(10px);
   }
   100% {
-    transform: translate(0px, 0px) scale(1);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.animate-blob {
-  animation: blob 7s infinite;
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.animation-delay-2000 {
-  animation-delay: 2s;
+/* Utility Classes */
+.shadow-soft {
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.04), 0 1px 3px 0 rgba(0, 0, 0, 0.06);
 }
 
-.animation-delay-4000 {
-  animation-delay: 4s;
+.shadow-elevated {
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 2px 6px 0 rgba(0, 0, 0, 0.06);
 }
 
-.animation-delay-1000 {
-  animation-delay: 1s;
+.shadow-floating {
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.12), 0 4px 12px 0 rgba(0, 0, 0, 0.08);
 }
 
-.animation-delay-3000 {
-  animation-delay: 3s;
+/* Scrollbar styling */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground)) transparent;
 }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  /* Scroll enhancements */
-  .scrollbar-thin {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
-    border-radius: 3px;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: transparent;
-  }
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
