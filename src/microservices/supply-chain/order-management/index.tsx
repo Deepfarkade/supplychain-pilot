@@ -30,7 +30,7 @@ const OrderManagement: React.FC = () => {
           <Badge variant="secondary">Chat Assistant</Badge>
         </div>
 
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>Order Management Chat Assistant</CardTitle>

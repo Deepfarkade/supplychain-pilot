@@ -23,9 +23,9 @@ const LazyMicroserviceLoader: React.FC<{ domain: string; slug: string }> = memo(
     throw new Error(`Microservice ${domain}/${slug} has no element function defined`);
   }
 
-  // Create lazy component dynamically
+  // Create lazy component directly from the import function
   const LazyComponent = useMemo(() => {
-    return React.lazy(microservice.element!);
+    return React.lazy(() => microservice.element!());
   }, [microservice.element]);
 
   return <LazyComponent />;

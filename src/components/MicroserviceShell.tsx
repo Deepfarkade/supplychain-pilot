@@ -121,7 +121,8 @@ const MicroserviceShell: React.FC<MicroserviceShellProps> = memo(({
         <div className={cn(
           'container mx-auto',
           !fullBleed && 'max-w-7xl',
-          paddingClasses[padding]
+          paddingClasses[padding],
+          fullBleed && 'px-4 sm:px-6 lg:px-8' // Better side margins for full-bleed
         )}>
           {/* Breadcrumbs */}
           {breadcrumbs.length > 0 && (
@@ -198,9 +199,9 @@ const MicroserviceShell: React.FC<MicroserviceShellProps> = memo(({
       {/* Main Content Area */}
       <main className={cn(
         'flex-1',
-        fullBleed ? 'w-full' : 'container mx-auto max-w-7xl',
+        fullBleed ? 'w-full max-w-none' : 'container mx-auto max-w-7xl',
         paddingClasses[padding],
-        fullBleed && padding !== 'none' && 'px-1 sm:px-2' // Minimal horizontal padding for full-bleed
+        fullBleed && padding !== 'none' && 'px-4 sm:px-6 lg:px-8' // Always some side padding for fullBleed
       )}>
         {children}
       </main>

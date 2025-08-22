@@ -59,7 +59,7 @@ const ConversationalAgents: React.FC = () => {
           <Badge variant="secondary">Translation</Badge>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto space-y-6">
           <Card className="h-[600px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
