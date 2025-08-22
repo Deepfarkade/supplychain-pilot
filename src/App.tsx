@@ -11,6 +11,7 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import Home from "./pages/Home";
 import AppStore from "./pages/AppStore";
 import Settings from "./pages/Settings";
+import ApiSettings from "./pages/ApiSettings";
 import NotFound from "./pages/NotFound";
 import { MicroserviceContainer } from "./components/MicroserviceContainer";
 
@@ -30,6 +31,7 @@ const App = () => (
                   <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
                   <Route path="/appstore" element={<ProtectedRoute><AppStore /></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  <Route path="/api-settings" element={<ProtectedRoute><ApiSettings /></ProtectedRoute>} />
                   {/* Microservice Routes */}
                   <Route path="/app/:domain/:slug" element={<ProtectedRoute><MicroserviceContainer /></ProtectedRoute>} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

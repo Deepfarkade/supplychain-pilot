@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Settings as SettingsIcon, Database, Shield, User, ArrowLeft } from 'lucide-react';
+import { Settings as SettingsIcon, Database, Shield, User, ArrowLeft, Server } from 'lucide-react';
 
 const Settings = () => {
   const { user } = useAuth();
@@ -37,10 +37,14 @@ const Settings = () => {
         </div>
 
         <Tabs defaultValue="database" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="database" className="flex items-center gap-2">
               <Database className="h-4 w-4" />
               Database
+            </TabsTrigger>
+            <TabsTrigger value="api" className="flex items-center gap-2">
+              <Server className="h-4 w-4" />
+              API Settings
             </TabsTrigger>
             <TabsTrigger value="security" className="flex items-center gap-2">
               <Shield className="h-4 w-4" />
@@ -54,6 +58,31 @@ const Settings = () => {
 
           <TabsContent value="database" className="mt-6">
             <DatabaseConfig />
+          </TabsContent>
+
+          <TabsContent value="api" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Server className="h-5 w-5" />
+                  API Configuration
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-center">
+                  <p className="text-muted-foreground mb-4">
+                    Manage all API configurations, endpoints, and security settings in one centralized location.
+                  </p>
+                  <Button 
+                    onClick={() => navigate('/api-settings')}
+                    className="flex items-center gap-2"
+                  >
+                    <Server className="h-4 w-4" />
+                    Open API Settings
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="security" className="mt-6">
