@@ -20,7 +20,7 @@ const InventoryRebalancer: React.FC = () => {
       description="Intelligent inventory optimization and automated rebalancing across distribution networks"
       icon={Package}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Uses production defaults
       metadata={{
         title: 'Inventory Rebalancer - Inventory Optimization',
         description: 'AI-powered inventory optimization and automated rebalancing across networks'

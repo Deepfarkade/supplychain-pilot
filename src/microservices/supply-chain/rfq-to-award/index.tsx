@@ -33,7 +33,7 @@ const RFQToAward: React.FC = () => {
       description="Streamline procurement with AI-powered RFQ analysis and automated supplier selection"
       icon={ShoppingCart}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Uses production defaults for optimal space utilization
       metadata={{
         title: 'RFQ-to-Award Co-Pilot - Procurement Automation',
         description: 'AI-powered RFQ analysis, supplier evaluation, and automated award recommendations'

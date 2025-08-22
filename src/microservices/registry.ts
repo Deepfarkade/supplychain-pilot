@@ -40,7 +40,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['chat', 'ai', 'nlp'],
     imageUrl: conversationalAgentsImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/general/conversational-agents/index'),
     metadata: {
       title: 'Conversational Agents - AI Chat Interface',
@@ -62,7 +61,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['gpt', 'azure', 'playground'],
     imageUrl: directGptImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/general/direct-gpt/index'),
     metadata: {
       title: 'Direct GPT - Azure OpenAI Playground',
@@ -84,7 +82,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['documents', 'analysis', 'comparison'],
     imageUrl: documentAnalysisImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/general/document-comparer/index'),
     metadata: {
       title: 'Document Comparer - AI Document Analysis',
@@ -108,7 +105,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['rfq', 'procurement', 'supplier', 'award'],
     imageUrl: supplyChainNetworkImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/supply-chain/rfq-to-award/index'),
     metadata: {
       title: 'RFQ-to-Award Co-Pilot - Procurement Automation',
@@ -130,7 +126,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['forecast', 'demand', 'ml', 'analytics'],
     imageUrl: inventoryDashboardImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/supply-chain/demand-forecast/index'),
     metadata: {
       title: 'Demand Forecast Review - Supply Chain Analytics',
@@ -152,7 +147,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['risk', 'supplier', 'monitoring', 'analytics'],
     imageUrl: supplyChainNetworkImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/supply-chain/supplier-risk/index'),
     metadata: {
       title: 'Supplier Risk Monitor - Risk Management',
@@ -174,7 +168,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['inventory', 'optimization', 'rebalancing', 'distribution'],
     imageUrl: inventoryDashboardImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/supply-chain/inventory-rebalancer/index'),
     metadata: {
       title: 'Inventory Rebalancer - Inventory Optimization',
@@ -196,7 +189,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['orders', 'management', 'processing', 'chat'],
     imageUrl: supplyChainNetworkImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/supply-chain/order-management/index'),
     metadata: {
       title: 'Order Management Agent - Order Processing',
@@ -220,7 +212,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['batch', 'release', 'quality', 'compliance'],
     imageUrl: pharmaLabImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/pharma/batch-release/index'),
     metadata: {
       title: 'Batch Release Assistant - Pharmaceutical Quality',
@@ -242,7 +233,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['deviation', 'capa', 'quality', 'analysis'],
     imageUrl: pharmaLabImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/pharma/deviation-capa/index'),
     metadata: {
       title: 'Deviation CAPA Summarizer - Quality Management',
@@ -264,7 +254,6 @@ export const microserviceRegistry: MicroserviceConfig[] = [
     development: true,
     tags: ['regulatory', 'dossier', 'compliance', 'documents'],
     imageUrl: pharmaLabImg,
-    layout: { fullBleed: true, header: 'compact', padding: 'md' },
     element: () => import('@/microservices/pharma/regulatory-dossier/index'),
     metadata: {
       title: 'Regulatory Dossier Helper - Regulatory Compliance',

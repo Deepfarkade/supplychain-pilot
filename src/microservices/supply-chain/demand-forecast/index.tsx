@@ -20,7 +20,7 @@ const DemandForecast: React.FC = () => {
       description="Advanced demand forecasting with ML models and supply chain optimization"
       icon={TrendingUp}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Uses production defaults
       metadata={{
         title: 'Demand Forecast Review - Supply Chain Analytics',
         description: 'Machine learning powered demand forecasting and supply chain optimization'

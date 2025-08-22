@@ -20,7 +20,7 @@ const DocumentComparer: React.FC = () => {
       description="Demonstrate GenAI power for knowledge base Q&A and document analysis"
       icon={FileSearch}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Uses production defaults
       metadata={{
         title: 'Document Comparer - AI Document Analysis',
         description: 'AI-powered document comparison and knowledge base Q&A system'

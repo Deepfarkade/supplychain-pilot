@@ -20,7 +20,7 @@ const DeviationCAPA: React.FC = () => {
       description="Automated deviation analysis and CAPA recommendation generation for quality management"
       icon={AlertTriangle}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Uses production defaults
       metadata={{
         title: 'Deviation CAPA Summarizer - Quality Management',
         description: 'Automated deviation analysis and CAPA recommendations for pharmaceutical quality'

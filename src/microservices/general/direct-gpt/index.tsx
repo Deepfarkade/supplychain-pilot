@@ -20,7 +20,7 @@ const DirectGPT: React.FC = () => {
       description="Azure ChatGPT playground to explore different model capabilities and configurations"
       icon={Bot}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Uses production defaults - layout optimized for embedded apps
       metadata={{
         title: 'Direct GPT - Azure OpenAI Playground',
         description: 'Explore Azure OpenAI models with interactive playground interface'

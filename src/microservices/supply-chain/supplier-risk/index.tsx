@@ -20,7 +20,7 @@ const SupplierRisk: React.FC = () => {
       description="Real-time supplier risk assessment and monitoring with predictive analytics"
       icon={Shield}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Uses production defaults
       metadata={{
         title: 'Supplier Risk Monitor - Risk Management',
         description: 'Real-time supplier risk assessment with predictive analytics and monitoring'

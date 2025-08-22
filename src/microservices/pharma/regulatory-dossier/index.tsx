@@ -20,7 +20,7 @@ const RegulatoryDossier: React.FC = () => {
       description="Intelligent regulatory document preparation and compliance verification assistant"
       icon={FileText}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Uses production defaults
       metadata={{
         title: 'Regulatory Dossier Helper - Regulatory Compliance',
         description: 'AI-powered regulatory document preparation and compliance verification'

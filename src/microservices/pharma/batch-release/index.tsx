@@ -20,7 +20,7 @@ const BatchRelease: React.FC = () => {
       description="AI-powered batch release decision support with regulatory compliance validation"
       icon={FlaskConical}
       breadcrumbs={breadcrumbs}
-      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      // Uses production defaults
       metadata={{
         title: 'Batch Release Assistant - Pharmaceutical Quality',
         description: 'AI-powered batch release decisions with automated compliance validation'
