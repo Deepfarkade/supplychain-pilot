@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { AppCard } from '@/components/AppCard';
 import { AppHeader } from '@/components/AppHeader';
 import { Loading } from '@/components/Loading';
-import { getAllMicroservices, getMicroservicesByDomain } from '@/microservices/registry';
+import { getAllMicroservices, getMicroservicesByDomain, searchMicroservices } from '@/microservices/registry';
+import { useDebounce } from '@/hooks/useDebounce';
 
 // Import generated images
 import conversationalAgentsImg from '@/assets/conversational-agents.jpg'
@@ -53,8 +54,11 @@ const AppStore = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('general')
   const [isLoading, setIsLoading] = useState(false)
+  
+  // Debounce search to improve performance
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-  // Get dynamic app data from registry
+  // Get dynamic app data from registry with performance optimization
   const appData = useMemo(() => {
     const allMicroservices = getAllMicroservices();
     
@@ -67,10 +71,12 @@ const AppStore = () => {
     allMicroservices.forEach(ms => {
       const appInfo = {
         title: ms.name,
-        description: defaultDescriptions[ms.slug as keyof typeof defaultDescriptions] || `AI-powered ${ms.name.toLowerCase()} solution`,
-        imageUrl: imageMapping[ms.slug as keyof typeof imageMapping] || supplyChainNetworkImg,
+        description: ms.description || defaultDescriptions[ms.slug as keyof typeof defaultDescriptions] || `AI-powered ${ms.name.toLowerCase()} solution`,
+        imageUrl: ms.imageUrl || imageMapping[ms.slug as keyof typeof imageMapping] || supplyChainNetworkImg,
         domain: ms.domain,
-        slug: ms.slug
+        slug: ms.slug,
+        tags: ms.tags || [],
+        category: ms.category
       };
 
       if (ms.domain === 'general') {
@@ -82,18 +88,35 @@ const AppStore = () => {
       }
     });
 
+    // Sort by order if available
+    Object.keys(groupedData).forEach(domain => {
+      groupedData[domain as keyof typeof groupedData].sort((a, b) => {
+        const msA = allMicroservices.find(ms => ms.slug === a.slug);
+        const msB = allMicroservices.find(ms => ms.slug === b.slug);
+        return (msA?.order || 999) - (msB?.order || 999);
+      });
+    });
+
     return groupedData;
   }, []);
 
-  // Filter apps based on search query
+  // Filter apps based on debounced search query with enhanced search
   const filteredApps = useMemo(() => {
-    if (!searchQuery) return appData[activeTab as keyof typeof appData]
+    if (!debouncedSearchQuery) return appData[activeTab as keyof typeof appData]
     
-    return appData[activeTab as keyof typeof appData].filter(app =>
-      app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.description.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  }, [searchQuery, activeTab, appData])
+    // Use the registry search function for better performance
+    const searchResults = searchMicroservices(debouncedSearchQuery, activeTab);
+    
+    return searchResults.map(ms => ({
+      title: ms.name,
+      description: ms.description || defaultDescriptions[ms.slug as keyof typeof defaultDescriptions] || `AI-powered ${ms.name.toLowerCase()} solution`,
+      imageUrl: ms.imageUrl || imageMapping[ms.slug as keyof typeof imageMapping] || supplyChainNetworkImg,
+      domain: ms.domain,
+      slug: ms.slug,
+      tags: ms.tags || [],
+      category: ms.category
+    }));
+  }, [debouncedSearchQuery, activeTab, appData])
 
   const handleExplore = (domain: string, slug: string) => {
     setIsLoading(true)

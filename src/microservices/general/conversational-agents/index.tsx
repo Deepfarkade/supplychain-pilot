@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
+import { MicroserviceShell } from '@/components/MicroserviceShell';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { AppHeader } from '@/components/AppHeader';
-import { ArrowLeft, Send, Bot, User } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
+import { Send, Bot, User, MessageSquare } from 'lucide-react';
 
 const ConversationalAgents: React.FC = () => {
-  const navigate = useNavigate();
   const [messages, setMessages] = useState([
     { id: 1, type: 'bot', content: 'Hello! I\'m your AI assistant. How can I help you today?' }
   ]);
   const [inputMessage, setInputMessage] = useState('');
-
-  const handleBack = () => {
-    navigate('/appstore');
-  };
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
@@ -40,46 +35,30 @@ const ConversationalAgents: React.FC = () => {
     }, 1000);
   };
 
-  return (
-    <div className="min-h-screen bg-background">
-      <AppHeader />
-      
-      {/* Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
-        <div className="absolute inset-0 network-pattern" />
-        <div className="absolute inset-0 dotted-pattern opacity-30" />
-        
-        <div className="relative z-10 container mx-auto px-4 py-8">
-          <div className="flex items-center gap-4 mb-6">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleBack}
-              className="gap-2 hover:bg-accent/50"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to App Store
-            </Button>
-          </div>
-          
-          <div className="max-w-4xl mx-auto text-center animate-fade-in">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="p-3 rounded-lg bg-primary/10">
-                <Bot className="h-8 w-8 text-primary" />
-              </div>
-              <h1 className="text-4xl font-bold text-foreground">
-                Conversational Agents
-              </h1>
-            </div>
-            <p className="text-lg text-muted-foreground">
-              Test deployed models with customizable translation and personalized prompts
-            </p>
-          </div>
-        </div>
-      </div>
+  const breadcrumbs = [
+    { label: 'General' },
+    { label: 'Conversational Agents' }
+  ];
 
-      {/* Chat Interface */}
-      <div className="container mx-auto px-4 py-8">
+  return (
+    <MicroserviceShell
+      title="Conversational Agents"
+      description="Test deployed models with customizable chatbot interface, translation and personalized prompts"
+      icon={MessageSquare}
+      breadcrumbs={breadcrumbs}
+      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      metadata={{
+        title: 'Conversational Agents - AI Chat Interface',
+        description: 'Interactive AI chatbot with customizable prompts and translation capabilities'
+      }}
+    >
+      <div className="space-y-6">
+        <div className="flex gap-2">
+          <Badge variant="secondary">AI Chat</Badge>
+          <Badge variant="secondary">NLP</Badge>
+          <Badge variant="secondary">Translation</Badge>
+        </div>
+
         <div className="max-w-4xl mx-auto">
           <Card className="h-[600px] flex flex-col">
             <CardHeader>

@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
+import { MicroserviceShell } from '@/components/MicroserviceShell';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { AppHeader } from '@/components/AppHeader';
-import { ArrowLeft, Upload, FileText, TrendingUp, CheckCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Upload, FileText, TrendingUp, CheckCircle, ShoppingCart } from 'lucide-react';
 
 const RFQToAward: React.FC = () => {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('upload');
   const [rfqData, setRfqData] = useState({
     title: '',
@@ -20,59 +18,34 @@ const RFQToAward: React.FC = () => {
     deadline: ''
   });
 
-  const handleBack = () => {
-    navigate('/appstore');
-  };
-
   const handleInputChange = (field: string, value: string) => {
     setRfqData(prev => ({ ...prev, [field]: value }));
   };
 
-  return (
-    <div className="min-h-screen bg-background">
-      <AppHeader />
-      
-      {/* Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
-        <div className="absolute inset-0 network-pattern" />
-        <div className="absolute inset-0 dotted-pattern opacity-30" />
-        
-        <div className="relative z-10 container mx-auto px-4 py-8">
-          <div className="flex items-center gap-4 mb-6">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleBack}
-              className="gap-2 hover:bg-accent/50"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to App Store
-            </Button>
-          </div>
-          
-          <div className="max-w-4xl mx-auto text-center animate-fade-in">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="p-3 rounded-lg bg-primary/10">
-                <TrendingUp className="h-8 w-8 text-primary" />
-              </div>
-              <h1 className="text-4xl font-bold text-foreground">
-                RFQ-to-Award Co-Pilot
-              </h1>
-            </div>
-            <p className="text-lg text-muted-foreground mb-6">
-              Streamline procurement processes with AI-powered RFQ analysis and supplier selection automation
-            </p>
-            <div className="flex gap-2 justify-center">
-              <Badge variant="secondary">AI-Powered</Badge>
-              <Badge variant="secondary">Supply Chain</Badge>
-              <Badge variant="secondary">Procurement</Badge>
-            </div>
-          </div>
-        </div>
-      </div>
+  const breadcrumbs = [
+    { label: 'Supply Chain' },
+    { label: 'RFQ-to-Award' }
+  ];
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+  return (
+    <MicroserviceShell
+      title="RFQ-to-Award Co-Pilot"
+      description="Streamline procurement with AI-powered RFQ analysis and automated supplier selection"
+      icon={ShoppingCart}
+      breadcrumbs={breadcrumbs}
+      layout={{ fullBleed: true, header: 'compact', padding: 'md' }}
+      metadata={{
+        title: 'RFQ-to-Award Co-Pilot - Procurement Automation',
+        description: 'AI-powered RFQ analysis, supplier evaluation, and automated award recommendations'
+      }}
+    >
+      <div className="space-y-6">
+        <div className="flex gap-2">
+          <Badge variant="secondary">AI-Powered</Badge>
+          <Badge variant="secondary">Procurement</Badge>
+          <Badge variant="secondary">RFQ Analysis</Badge>
+        </div>
+
         <div className="max-w-6xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-4 h-12">
@@ -278,7 +251,7 @@ const RFQToAward: React.FC = () => {
           </Tabs>
         </div>
       </div>
-    </div>
+    </MicroserviceShell>
   );
 };
 
