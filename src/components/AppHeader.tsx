@@ -137,22 +137,6 @@ export function AppHeader() {
           <Button variant="ghost" size="sm">
             <HelpCircle className="w-4 h-4" />
           </Button>
-
-          {/* Notifications */}
-          <Button variant="ghost" size="sm" className="relative">
-            <Bell className="w-4 h-4" />
-            <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 text-[10px]">
-              3
-            </Badge>
-          </Button>
-
-          {/* User Avatar */}
-          <Button variant="ghost" size="sm" className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-medium">
-              DF
-            </div>
-            <span className="text-sm">DF</span>
-          </Button>
         </div>
       </div>
     </header>

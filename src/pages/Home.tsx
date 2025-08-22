@@ -26,6 +26,7 @@ import { PageHeader } from '@/components/PageHeader'
 import { Loading } from '@/components/Loading'
 import { useAuth } from '@/contexts/AuthContext'
 import { getAllMicroservices } from '@/microservices/registry'
+import { NotificationPanel } from '@/components/NotificationPanel'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -98,11 +99,28 @@ const Home = () => {
               </div>
             </div>
 
-            {/* User Info */}
-            <div className="px-4 py-2 border-b border-border/30">
+            {/* User Profile */}
+            <div className="px-4 py-3 border-b border-border/30">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-medium">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-medium text-foreground">
+                    {user?.name || 'User'}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {user?.email || 'user@company.com'}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Notifications */}
+            <div className="px-4 py-3 border-b border-border/30">
               <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-foreground">{user?.name || 'User'}</span>
+                <NotificationPanel />
+                <span className="text-sm text-foreground">Notifications</span>
               </div>
             </div>
 
@@ -129,29 +147,28 @@ const Home = () => {
             </nav>
 
             {/* Bottom Static Section */}
-            <div className="p-3 border-t border-border/30">
-              {/* Bottom navigation items in a single column */}
-              <div className="grid grid-cols-1 gap-1 mb-2">
-                {bottomSidebarItems.map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleNavigation(item.path)}
-                    disabled={isLoading}
-                    className="w-full flex items-center gap-2 px-2 py-2 rounded-md text-xs transition-all duration-200 text-foreground hover:bg-accent hover:text-accent-foreground"
-                  >
-                    <item.icon className="w-3 h-3 flex-shrink-0" />
-                    <span className="truncate">{item.label}</span>
-                  </button>
-                ))}
-              </div>
-              {/* Logout Button */}
+            <div className="p-3 border-t border-border/30 space-y-2">
+              {/* Bottom navigation items */}
+              {bottomSidebarItems.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleNavigation(item.path)}
+                  disabled={isLoading}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 text-foreground hover:bg-accent hover:text-accent-foreground"
+                >
+                  <item.icon className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">{item.label}</span>
+                </button>
+              ))}
+              
+              {/* Logout Button - Properly Highlighted */}
               <Button
-                variant="destructive"
+                variant="outline"
                 size="sm"
-                className="w-full h-8 text-xs justify-start gap-2 bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground border border-destructive/20"
+                className="w-full h-10 text-sm justify-start gap-3 border-2 border-destructive/30 text-destructive hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-all duration-200 font-medium shadow-sm dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-white dark:hover:border-red-500"
                 onClick={logout}
               >
-                <LogOut className="w-3 h-3" />
+                <LogOut className="w-4 h-4" />
                 Logout
               </Button>
             </div>
