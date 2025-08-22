@@ -1,200 +1,97 @@
-import React, { Suspense, useState, useEffect } from 'react';
+/**
+ * Production-grade microservice container with lazy loading and error boundaries
+ */
+
+import React, { Suspense, memo, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, AlertTriangle, RefreshCw } from 'lucide-react';
-import { Loading } from '@/components/Loading';
-import { AppHeader } from '@/components/AppHeader';
 import { getMicroservice } from '@/microservices/registry';
+import { MicroserviceShell } from '@/components/MicroserviceShell';
+import { MicroservicePageSkeleton } from '@/components/ui/skeleton';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
-// Error Boundary for Microservices
-class MicroserviceErrorBoundary extends React.Component<
-  { children: React.ReactNode; onRetry: () => void; microserviceName: string },
-  { hasError: boolean; error?: Error }
-> {
-  constructor(props: any) {
-    super(props);
-    this.state = { hasError: false };
+/**
+ * Lazy component loader with error handling
+ */
+const LazyMicroserviceLoader: React.FC<{ domain: string; slug: string }> = memo(({ domain, slug }) => {
+  const microservice = getMicroservice(domain, slug);
+  
+  if (!microservice) {
+    throw new Error(`Microservice ${domain}/${slug} not found in registry`);
   }
 
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
+  if (!microservice.element) {
+    throw new Error(`Microservice ${domain}/${slug} has no element function defined`);
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Microservice Error:', error, errorInfo);
-  }
+  // Create lazy component dynamically
+  const LazyComponent = useMemo(() => {
+    return React.lazy(microservice.element!);
+  }, [microservice.element]);
 
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen bg-background">
-          <AppHeader />
-          <div className="container mx-auto px-4 py-8">
-            <Card className="max-w-2xl mx-auto">
-              <CardHeader className="text-center">
-                <div className="flex justify-center mb-4">
-                  <AlertTriangle className="h-12 w-12 text-destructive" />
-                </div>
-                <CardTitle className="text-xl text-destructive">
-                  Microservice Error
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-center space-y-4">
-                <p className="text-muted-foreground">
-                  The {this.props.microserviceName} microservice encountered an error and couldn't load properly.
-                </p>
-                <div className="flex gap-3 justify-center">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => window.history.back()}
-                    className="gap-2"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    Go Back
-                  </Button>
-                  <Button 
-                    onClick={this.props.onRetry}
-                    className="gap-2"
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    Retry
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      );
-    }
+  return <LazyComponent />;
+});
 
-    return this.props.children;
-  }
-}
+LazyMicroserviceLoader.displayName = 'LazyMicroserviceLoader';
 
-// Microservice Loader Component
-const MicroserviceLoader: React.FC<{ domain: string; slug: string }> = ({ domain, slug }) => {
-  const [MicroserviceComponent, setMicroserviceComponent] = useState<React.ComponentType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadMicroservice = async () => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      // Dynamic import based on domain and slug
-      const microserviceModule = await import(`@/microservices/${domain}/${slug}/index.tsx`);
-      setMicroserviceComponent(() => microserviceModule.default);
-    } catch (err) {
-      console.error(`Failed to load microservice ${domain}/${slug}:`, err);
-      setError(`Failed to load ${domain}/${slug} microservice`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadMicroservice();
-  }, [domain, slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <AppHeader />
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center space-y-4">
-            <Loading className="scale-150" />
-            <p className="text-lg text-muted-foreground">
-              Loading {getMicroservice(domain, slug)?.name}...
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !MicroserviceComponent) {
-    return (
-      <div className="min-h-screen bg-background">
-        <AppHeader />
-        <div className="container mx-auto px-4 py-8">
-          <Card className="max-w-2xl mx-auto">
-            <CardHeader className="text-center">
-              <div className="flex justify-center mb-4">
-                <AlertTriangle className="h-12 w-12 text-destructive" />
-              </div>
-              <CardTitle className="text-xl text-destructive">
-                Microservice Not Found
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-center space-y-4">
-              <p className="text-muted-foreground">
-                The requested microservice "{domain}/{slug}" is not available or hasn't been developed yet.
-              </p>
-              <div className="flex gap-3 justify-center">
-                <Button 
-                  variant="outline" 
-                  onClick={() => window.history.back()}
-                  className="gap-2"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Go Back
-                </Button>
-                <Button 
-                  onClick={loadMicroservice}
-                  className="gap-2"
-                >
-                  <RefreshCw className="h-4 w-4" />
-                  Retry
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
-
-  return <MicroserviceComponent />;
-};
-
-// Main Microservice Container
+/**
+ * Main microservice container with production-grade features
+ */
 export const MicroserviceContainer: React.FC = () => {
   const { domain, slug } = useParams<{ domain: string; slug: string }>();
   const navigate = useNavigate();
 
+  // Redirect to app store if params are missing
   if (!domain || !slug) {
-    navigate('/appstore');
+    navigate('/appstore', { replace: true });
     return null;
   }
 
   const microservice = getMicroservice(domain, slug);
-  
-  const handleRetry = () => {
-    window.location.reload();
-  };
 
-  return (
-    <MicroserviceErrorBoundary 
-      onRetry={handleRetry}
-      microserviceName={microservice?.name || `${domain}/${slug}`}
-    >
-      <Suspense fallback={
-        <div className="min-h-screen bg-background">
-          <AppHeader />
-          <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="text-center space-y-4">
-              <Loading className="scale-150" />
-              <p className="text-lg text-muted-foreground">
-                Initializing {microservice?.name}...
-              </p>
-            </div>
+  // Handle microservice not found
+  if (!microservice) {
+    return (
+      <MicroserviceShell
+        title="Service Not Found"
+        description={`The microservice "${domain}/${slug}" is not available`}
+        layout={{ header: 'compact', padding: 'md' }}
+      >
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center space-y-4">
+            <p className="text-muted-foreground">
+              This microservice is not available or hasn't been implemented yet.
+            </p>
           </div>
         </div>
+      </MicroserviceShell>
+    );
+  }
+
+  const breadcrumbs = [
+    { label: microservice.domain.charAt(0).toUpperCase() + microservice.domain.slice(1).replace('-', ' ') },
+    { label: microservice.name }
+  ];
+
+  return (
+    <ErrorBoundary
+      onError={(error, errorInfo) => {
+        console.error(`Microservice ${domain}/${slug} error:`, error, errorInfo);
+      }}
+    >
+      <Suspense fallback={
+        <MicroserviceShell
+          title={microservice.name}
+          description={microservice.description}
+          icon={microservice.icon}
+          breadcrumbs={breadcrumbs}
+          layout={microservice.layout}
+          metadata={microservice.metadata}
+        >
+          <MicroservicePageSkeleton />
+        </MicroserviceShell>
       }>
-        <MicroserviceLoader domain={domain} slug={slug} />
+        <LazyMicroserviceLoader domain={domain} slug={slug} />
       </Suspense>
-    </MicroserviceErrorBoundary>
+    </ErrorBoundary>
   );
 };

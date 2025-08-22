@@ -136,7 +136,7 @@ const ConversationalAgents: React.FC = () => {
           </Card>
         </div>
       </div>
-    </div>
+    </MicroserviceShell>
   );
 };
 
