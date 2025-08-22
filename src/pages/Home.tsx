@@ -82,9 +82,9 @@ const Home = () => {
           />
         }
       >
-        <div className="flex h-[calc(100vh-80px)] overflow-hidden">
+        <div className="flex h-[calc(100vh-120px)] overflow-hidden">
           {/* Left Sidebar */}
-          <div className="w-64 surface-1 border-r border-border/40 flex flex-col h-full">
+          <div className="w-64 surface-1 border-r border-border/40 flex flex-col">
             {/* User Profile */}
             <div className="p-4 border-b border-border/30">
               <div className="flex items-center gap-3">
@@ -158,76 +158,74 @@ const Home = () => {
           </div>
 
           {/* Main Content - Full Width with Proper Spacing */}
-          <div className="flex-1 px-8 py-3 flex flex-col h-full">
-            <div className="max-w-6xl mx-auto flex flex-col h-full justify-between">
+          <div className="flex-1 px-8 py-4 overflow-y-auto">
+            <div className="max-w-6xl mx-auto space-y-6">
               
               {/* Hero Welcome Section */}
-              <div className="animate-fade-in text-center space-y-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full text-primary text-xs font-medium">
-                  <Zap className="w-3 h-3" />
+              <div className="animate-fade-in text-center space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium">
+                  <Zap className="w-4 h-4" />
                   Welcome to AI-Powered Supply Chain
                 </div>
-                <h1 className="text-2xl font-bold text-foreground">
+                <h1 className="text-4xl font-bold text-foreground">
                   Transform Your Operations
                 </h1>
-                <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                   Leverage cutting-edge AI applications to optimize your supply chain processes, 
-                  reduce costs, and drive operational excellence.
+                  reduce costs, and drive operational excellence across your organization.
                 </p>
-                <div className="flex items-center justify-center gap-3 pt-2">
+                <div className="flex items-center justify-center gap-4 pt-4">
                   <Button 
                     onClick={() => navigate('/appstore')} 
-                    size="sm"
                     className="gap-2"
                   >
-                    <Grid3X3 className="w-3 h-3" />
+                    <Grid3X3 className="w-4 h-4" />
                     Explore Applications
                   </Button>
                   <Button 
                     variant="outline" 
-                    size="sm"
                     onClick={() => navigate('/academy')}
                     className="gap-2"
                   >
-                    <GraduationCap className="w-3 h-3" />
+                    <GraduationCap className="w-4 h-4" />
                     Learn More
                   </Button>
                 </div>
               </div>
 
               {/* Key Features Grid */}
-              <div className="animate-fade-in grid grid-cols-1 md:grid-cols-3 gap-4" style={{ animationDelay: '200ms' }}>
-                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-3">
-                  <CardContent className="space-y-2">
-                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
-                      <Target className="w-4 h-4 text-primary" />
+              <div className="animate-fade-in grid grid-cols-1 md:grid-cols-3 gap-6" style={{ animationDelay: '200ms' }}>
+                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-4">
+                  <CardContent className="space-y-3">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
+                      <Target className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-sm font-semibold text-foreground">Precision Analytics</h3>
-                    <p className="text-xs text-muted-foreground">
+                    <h3 className="text-lg font-semibold text-foreground">Precision Analytics</h3>
+                    <p className="text-sm text-muted-foreground">
                       Advanced analytics and forecasting to optimize inventory, demand planning, and supply chain operations.
                     </p>
                   </CardContent>
                 </Card>
                 
-                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-3">
-                  <CardContent className="space-y-2">
-                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
-                      <Bot className="w-4 h-4 text-primary" />
+                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-4">
+                  <CardContent className="space-y-3">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
+                      <Bot className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-sm font-semibold text-foreground">AI Automation</h3>
-                    <p className="text-xs text-muted-foreground">
+                    <h3 className="text-lg font-semibold text-foreground">AI Automation</h3>
+                    <p className="text-sm text-muted-foreground">
                       Intelligent automation for procurement, quality management, and regulatory compliance processes.
                     </p>
                   </CardContent>
                 </Card>
                 
-                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-3">
-                  <CardContent className="space-y-2">
-                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
-                      <Award className="w-4 h-4 text-primary" />
+                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-4">
+                  <CardContent className="space-y-3">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
+                      <Award className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-sm font-semibold text-foreground">Quality Excellence</h3>
-                    <p className="text-xs text-muted-foreground">
+                    <h3 className="text-lg font-semibold text-foreground">Quality Excellence</h3>
+                    <p className="text-sm text-muted-foreground">
                       Ensure compliance and quality standards across pharmaceutical and supply chain operations.
                     </p>
                   </CardContent>
@@ -236,7 +234,7 @@ const Home = () => {
 
               {/* KPI Strip */}
               <div className="animate-fade-in" style={{ animationDelay: '400ms' }}>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {[
                     { label: 'Active Applications', value: allMicroservices.length.toString(), icon: Activity },
                     { label: 'User Sessions', value: '2,431', icon: Users },
@@ -244,9 +242,9 @@ const Home = () => {
                     { label: 'Cost Savings', value: '$1.2M', icon: BarChart3 }
                   ].map((stat, index) => (
                     <Card key={index} className="card-elevated hover:card-hover cursor-pointer">
-                      <CardContent className="p-3 text-center">
-                        <stat.icon className="w-4 h-4 mx-auto mb-1 text-primary" />
-                        <div className="text-xl font-bold text-foreground">{stat.value}</div>
+                      <CardContent className="p-4 text-center">
+                        <stat.icon className="w-6 h-6 mx-auto mb-2 text-primary" />
+                        <div className="text-2xl font-bold text-foreground">{stat.value}</div>
                         <div className="text-xs text-muted-foreground">{stat.label}</div>
                       </CardContent>
                     </Card>
