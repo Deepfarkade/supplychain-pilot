@@ -1,18 +1,32 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import DatabaseConfig from '@/components/DatabaseConfig';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Settings as SettingsIcon, Database, Shield, User } from 'lucide-react';
+import { Settings as SettingsIcon, Database, Shield, User, ArrowLeft } from 'lucide-react';
 
 const Settings = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8 px-4">
         <div className="mb-8">
+          <div className="flex items-center gap-4 mb-4">
+            <Button
+              variant="ghost" 
+              size="sm"
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2 hover:bg-accent"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Home
+            </Button>
+          </div>
           <h1 className="text-3xl font-bold flex items-center gap-2 mb-2">
             <SettingsIcon className="h-8 w-8" />
             Settings
