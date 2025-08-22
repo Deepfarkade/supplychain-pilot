@@ -5,27 +5,27 @@
 /* Enhanced Color Tokens and Layered Surface System */
 :root {
   /* Layered Surface System - Light Theme (Calm Enterprise) */
-  --background: 215 15% 92%;           /* surface-0: soft cool gray canvas */
-  --surface-1: 215 20% 96%;            /* surface-1: elevated cards */
-  --surface-2: 215 25% 90%;            /* surface-2: headers, rails */
+  --background: 216 18% 94%;           /* surface-0: soft cool gray canvas */
+  --surface-1: 216 20% 98%;            /* surface-1: elevated cards */
+  --surface-2: 216 15% 92%;            /* surface-2: headers, rails */
   
   --foreground: 222.2 84% 4.9%;
-  --card: 215 20% 96%;                 /* using surface-1 */
+  --card: 216 20% 98%;                 /* using surface-1 */
   --card-foreground: 222.2 84% 4.9%;
-  --popover: 215 20% 96%;
+  --popover: 216 20% 98%;
   --popover-foreground: 222.2 84% 4.9%;
   --primary: 47 100% 68%;
   --primary-foreground: 222.2 84% 4.9%;
-  --secondary: 215 20% 88%;            /* calm secondary */
+  --secondary: 216 15% 90%;            /* calm secondary */
   --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 215 15% 88%;                /* subtle muted */
+  --muted: 216 12% 86%;                /* subtle muted */
   --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 215 25% 85%;               /* gentle accent */
+  --accent: 216 18% 88%;               /* gentle accent */
   --accent-foreground: 222.2 84% 4.9%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
-  --border: 215 20% 82%;               /* subtle borders */
-  --input: 215 20% 88%;                /* input backgrounds */
+  --border: 216 15% 84%;               /* subtle borders */
+  --input: 216 18% 90%;                /* input backgrounds */
   --ring: 47 100% 68%;
   --radius: 0.5rem;
 

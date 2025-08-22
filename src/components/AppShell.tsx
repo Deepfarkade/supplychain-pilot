@@ -51,10 +51,9 @@ export const AppShell: React.FC<AppShellProps> = ({
       <main className="relative flex-1">
         {/* Subtle Background Patterns */}
         {showPatterns && (
-          <>
-            <div className="absolute inset-0 network-pattern" />
+          <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
             <div className="absolute inset-0 dotted-pattern" />
-          </>
+          </div>
         )}
         
         {/* Content Container */}

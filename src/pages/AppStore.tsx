@@ -172,21 +172,21 @@ const AppStore = () => {
         {/* Domain Tabs */}
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8 animate-fade-in" style={{ animationDelay: '100ms' }}>
           <TabsList className="grid w-full grid-cols-3 h-12 surface-1 border border-border/40">
-            <TabsTrigger value="general" className="text-sm font-medium transition-all duration-200">
+            <TabsTrigger value="general" className="text-sm font-medium transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               General
-              <Badge variant="secondary" className="ml-2">
+              <Badge variant="secondary" className="ml-2 data-[state=active]:bg-primary-foreground/20">
                 {appData.general.length}
               </Badge>
             </TabsTrigger>
-            <TabsTrigger value="supply-chain" className="text-sm font-medium transition-all duration-200">
+            <TabsTrigger value="supply-chain" className="text-sm font-medium transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               Supply Chain
-              <Badge variant="secondary" className="ml-2">
+              <Badge variant="secondary" className="ml-2 data-[state=active]:bg-primary-foreground/20">
                 {appData['supply-chain'].length}
               </Badge>
             </TabsTrigger>
-            <TabsTrigger value="pharma" className="text-sm font-medium transition-all duration-200">
+            <TabsTrigger value="pharma" className="text-sm font-medium transition-all duration-200 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               Pharma
-              <Badge variant="secondary" className="ml-2">
+              <Badge variant="secondary" className="ml-2 data-[state=active]:bg-primary-foreground/20">
                 {appData.pharma.length}
               </Badge>
             </TabsTrigger>

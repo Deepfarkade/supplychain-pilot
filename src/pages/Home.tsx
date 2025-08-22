@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { 
   Home as HomeIcon, 
   Grid3X3, 
@@ -15,33 +12,27 @@ import {
   FileText,
   MessageSquare,
   LogOut,
-  Truck,
   Package,
-  Search,
   TrendingUp,
   Users,
-  Activity
+  Activity,
+  Zap,
+  Target,
+  Award
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { AppShell } from '@/components/AppShell'
 import { PageHeader } from '@/components/PageHeader'
 import { Loading } from '@/components/Loading'
 import { useAuth } from '@/contexts/AuthContext'
-import { getAllMicroservices, getCategories } from '@/microservices/registry'
-import { AppCard } from '@/components/AppCard'
-import { useDebounce } from '@/hooks/useDebounce'
-import { useSessionState } from '@/hooks/useSessionState'
+import { getAllMicroservices } from '@/microservices/registry'
 
 const Home = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [searchQuery, setSearchQuery] = useSessionState('home-search', '')
-  const [activeCategory, setActiveCategory] = useSessionState('home-category', 'all')
   const { user, logout } = useAuth()
   
-  const debouncedSearch = useDebounce(searchQuery, 300)
-
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -56,29 +47,8 @@ const Home = () => {
     }
   }
 
-  // Get all microservices and categories
+  // Get microservices data for stats
   const allMicroservices = getAllMicroservices()
-  const categories = ['all', ...getCategories()]
-  
-  // Filter microservices based on search and category
-  const filteredMicroservices = React.useMemo(() => {
-    let filtered = allMicroservices
-    
-    if (activeCategory !== 'all') {
-      filtered = filtered.filter(ms => ms.category === activeCategory)
-    }
-    
-    if (debouncedSearch) {
-      const searchTerm = debouncedSearch.toLowerCase()
-      filtered = filtered.filter(ms => 
-        ms.name.toLowerCase().includes(searchTerm) ||
-        ms.description?.toLowerCase().includes(searchTerm) ||
-        ms.tags?.some(tag => tag.toLowerCase().includes(searchTerm))
-      )
-    }
-    
-    return filtered.slice(0, 8) // Show top 8 for homepage
-  }, [allMicroservices, activeCategory, debouncedSearch])
 
   const sidebarItems = [
     { icon: HomeIcon, label: 'Home', active: true, path: '/' },
@@ -90,15 +60,6 @@ const Home = () => {
     { icon: FileText, label: 'Raise a ticket', active: false, path: '/support' },
     { icon: MessageSquare, label: 'Feedback', active: false, path: '/feedback' }
   ]
-
-  const handleExplore = (domain: string, slug: string) => {
-    setIsLoading(true)
-    setTimeout(() => {
-      navigate(`/app/${domain}/${slug}`)
-      setIsLoading(false)
-    }, 300)
-  }
-
 
   if (!mounted) {
     return <Loading className="min-h-screen" />
@@ -165,9 +126,9 @@ const Home = () => {
             </nav>
 
             {/* Bottom Static Section */}
-            <div className="p-3 border-t border-border/30 space-y-1">
-              {/* Responsible AI, Raise Ticket, Feedback in same row */}
-              <div className="grid grid-cols-1 gap-1">
+            <div className="p-3 border-t border-border/30">
+              {/* Bottom navigation items in a single column */}
+              <div className="grid grid-cols-1 gap-1 mb-2">
                 {sidebarItems.slice(-3).map((item, index) => (
                   <button
                     key={index}
@@ -193,63 +154,79 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1 p-6">
-            <div className="space-y-8">
+          {/* Main Content - Full Width with Proper Spacing */}
+          <div className="flex-1 px-8 py-6">
+            <div className="max-w-6xl mx-auto space-y-12">
               
-              {/* Category Tabs Rail */}
-              <div className="animate-fade-in">
-                <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-                  <TabsList className="grid grid-cols-4 w-fit h-10 surface-1 border border-border/40">
-                    <TabsTrigger value="all" className="text-sm">All</TabsTrigger>
-                    <TabsTrigger value="AI Chat" className="text-sm">AI Chat</TabsTrigger>
-                    <TabsTrigger value="Analytics" className="text-sm">Analytics</TabsTrigger>
-                    <TabsTrigger value="Quality" className="text-sm">Quality</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
-
-              {/* Utility Row */}
-              <div className="flex items-center justify-between animate-fade-in" style={{ animationDelay: '100ms' }}>
-                <div className="relative flex-1 max-w-md">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                  <Input
-                    placeholder="Search applications..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 surface-1 border-border/40"
-                  />
+              {/* Hero Welcome Section */}
+              <div className="animate-fade-in text-center space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium">
+                  <Zap className="w-4 h-4" />
+                  Welcome to AI-Powered Supply Chain
                 </div>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate('/appstore')}
-                  className="gap-2"
-                >
-                  View All Apps
-                  <Grid3X3 className="h-4 w-4" />
-                </Button>
+                <h1 className="text-4xl font-bold text-foreground">
+                  Transform Your Operations
+                </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Leverage cutting-edge AI applications to optimize your supply chain processes, 
+                  reduce costs, and drive operational excellence across your organization.
+                </p>
+                <div className="flex items-center justify-center gap-4 pt-4">
+                  <Button 
+                    onClick={() => navigate('/appstore')} 
+                    className="gap-2"
+                  >
+                    <Grid3X3 className="w-4 h-4" />
+                    Explore Applications
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => navigate('/academy')}
+                    className="gap-2"
+                  >
+                    <GraduationCap className="w-4 h-4" />
+                    Learn More
+                  </Button>
+                </div>
               </div>
 
-              {/* App Card Grid */}
-              <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {filteredMicroservices.map((app, index) => (
-                    <div
-                      key={app.id}
-                      className="animate-slide-up"
-                      style={{ animationDelay: `${300 + index * 50}ms` }}
-                    >
-                      <AppCard
-                        title={app.name}
-                        description={app.description || ''}
-                        imageUrl={app.imageUrl || ''}
-                        domain={app.domain}
-                        slug={app.slug}
-                        onExplore={handleExplore}
-                      />
+              {/* Key Features Grid */}
+              <div className="animate-fade-in grid grid-cols-1 md:grid-cols-3 gap-8" style={{ animationDelay: '200ms' }}>
+                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-6">
+                  <CardContent className="space-y-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
+                      <Target className="w-6 h-6 text-primary" />
                     </div>
-                  ))}
-                </div>
+                    <h3 className="text-lg font-semibold text-foreground">Precision Analytics</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Advanced analytics and forecasting to optimize inventory, demand planning, and supply chain operations.
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-6">
+                  <CardContent className="space-y-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
+                      <Bot className="w-6 h-6 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">AI Automation</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Intelligent automation for procurement, quality management, and regulatory compliance processes.
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="card-elevated hover:card-hover cursor-pointer text-center p-6">
+                  <CardContent className="space-y-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto">
+                      <Award className="w-6 h-6 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">Quality Excellence</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Ensure compliance and quality standards across pharmaceutical and supply chain operations.
+                    </p>
+                  </CardContent>
+                </Card>
               </div>
 
               {/* KPI Strip */}
