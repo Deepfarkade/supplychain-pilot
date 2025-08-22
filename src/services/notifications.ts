@@ -157,7 +157,9 @@ class NotificationService {
         this.notifications = JSON.parse(stored).map((n: any) => ({
           ...n,
           timestamp: new Date(n.timestamp)
-        }));
+        })).filter((n: Notification) => 
+          n.timestamp instanceof Date && !isNaN(n.timestamp.getTime())
+        );
       }
     } catch (error) {
       console.warn('Failed to load notifications from storage:', error);
@@ -178,10 +180,11 @@ class NotificationService {
   }
 
   private createLocalNotification(notification: NotificationCreate): Notification {
+    const now = new Date();
     const newNotification: Notification = {
       id: `local_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       ...notification,
-      timestamp: new Date(),
+      timestamp: now,
       read: false
     };
 
