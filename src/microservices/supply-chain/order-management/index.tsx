@@ -30,7 +30,7 @@ const OrderManagement: React.FC = () => {
           <Badge variant="secondary">Chat Assistant</Badge>
         </div>
 
-        <EmbeddedApp>
+        <EmbeddedApp height="90vh">
           <iframe
             src="https://geni-ai-supply-chain-decisioning.wonderfulbush-77ea8b18.centralindia.azurecontainerapps.io/"
             className="w-full h-full border-0"
