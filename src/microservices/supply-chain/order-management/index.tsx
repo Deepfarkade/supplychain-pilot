@@ -1,6 +1,5 @@
 import React from 'react';
 import { MicroserviceShell } from '@/components/MicroserviceShell';
-import { EmbeddedApp } from '@/components/EmbeddedApp';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ClipboardList } from 'lucide-react';
@@ -30,14 +29,15 @@ const OrderManagement: React.FC = () => {
           <Badge variant="secondary">Chat Assistant</Badge>
         </div>
 
-        <EmbeddedApp height="90vh">
+        {/* Large embedded iframe utilizing full space */}
+        <div className="border border-border/20 rounded-lg overflow-hidden w-full" style={{ height: '85vh', minHeight: '800px' }}>
           <iframe
             src="https://geni-ai-supply-chain-decisioning.wonderfulbush-77ea8b18.centralindia.azurecontainerapps.io/"
             className="w-full h-full border-0"
             title="Order Management Chat"
             allow="microphone; camera"
           />
-        </EmbeddedApp>
+        </div>
         
         <div className="flex gap-3 justify-end">
           <Button variant="outline">
