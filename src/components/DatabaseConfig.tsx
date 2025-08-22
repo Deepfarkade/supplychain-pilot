@@ -1,144 +1,249 @@
 import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { mongoService, type MongoConfig } from '@/services/database/mongodb';
-import { Database, TestTube, Save } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { mongoService } from '@/services/database/mongodb';
+import { dbConfig } from '@/services/database/config';
+import { useToast } from '@/hooks/use-toast';
+import { Database, CheckCircle, XCircle, Loader2, Info } from 'lucide-react';
 
-interface DatabaseConfigProps {
-  onConfigSaved?: () => void;
-}
-
-const DatabaseConfig: React.FC<DatabaseConfigProps> = ({ onConfigSaved }) => {
-  const [config, setConfig] = useState<MongoConfig>({
-    connectionString: '',
-    databaseName: '',
-    collectionName: 'users'
-  });
+const DatabaseConfig = () => {
+  const [databaseName, setDatabaseName] = useState('');
+  const [collectionName, setCollectionName] = useState('');
+  const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [testResult, setTestResult] = useState<string | null>(null);
-  const [isSaved, setIsSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [connectionInfo, setConnectionInfo] = useState<{ success: boolean; message: string } | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
-    // Load existing configuration
-    const existingConfig = mongoService.loadConfig();
-    if (existingConfig) {
-      setConfig(existingConfig);
-      setIsSaved(true);
-    }
+    const loadConfig = () => {
+      const config = dbConfig.getConfig();
+      if (config) {
+        setDatabaseName(config.databaseName || '');
+        setCollectionName(config.collectionName || '');
+        setIsConnected(dbConfig.isConfigured());
+      }
+    };
+    
+    loadConfig();
   }, []);
 
-  const handleSave = () => {
-    mongoService.setConfig(config);
-    setIsSaved(true);
-    setTestResult(null);
-    onConfigSaved?.();
-  };
-
-  const handleTest = async () => {
+  const handleSaveConfig = async () => {
+    setError(null);
     setIsLoading(true);
-    setTestResult(null);
-    
+
     try {
-      mongoService.setConfig(config);
-      const success = await mongoService.testConnection();
-      setTestResult(success ? 'Connection successful!' : 'Connection failed');
-    } catch (error) {
-      setTestResult('Connection failed: ' + (error as Error).message);
+      // Validate input
+      const validation = dbConfig.validateConfig(databaseName, collectionName);
+      if (!validation.valid) {
+        setError(validation.error || 'Invalid configuration');
+        return;
+      }
+
+      // Save configuration
+      dbConfig.setConfig(databaseName, collectionName);
+      
+      // Test connection
+      const testResult = await mongoService.testConnection();
+      setConnectionInfo(testResult);
+      setIsConnected(testResult.success);
+
+      if (testResult.success) {
+        toast({
+          title: "Configuration Saved",
+          description: "Database configuration has been saved successfully.",
+        });
+        setError(null);
+      } else {
+        setError(testResult.message);
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Configuration failed';
+      setError(errorMessage);
+      setIsConnected(false);
+      toast({
+        variant: "destructive",
+        title: "Configuration Error",
+        description: errorMessage,
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleTestConnection = async () => {
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      if (!dbConfig.isConfigured()) {
+        setError('Please save configuration first');
+        return;
+      }
+
+      const testResult = await mongoService.testConnection();
+      setConnectionInfo(testResult);
+      setIsConnected(testResult.success);
+      
+      if (testResult.success) {
+        toast({
+          title: "Connection Test Successful",
+          description: testResult.message,
+        });
+      } else {
+        setError(testResult.message);
+        toast({
+          variant: "destructive",
+          title: "Connection Test Failed",
+          description: testResult.message,
+        });
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Connection test failed';
+      setError(errorMessage);
+      setIsConnected(false);
+      toast({
+        variant: "destructive",
+        title: "Connection Error",
+        description: errorMessage,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClearConfig = () => {
+    dbConfig.clearConfig();
+    setDatabaseName('');
+    setCollectionName('');
+    setIsConnected(false);
+    setConnectionInfo(null);
+    setError(null);
+    toast({
+      title: "Configuration Cleared",
+      description: "Database configuration has been reset.",
+    });
+  };
+
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Database className="h-5 w-5" />
           MongoDB Configuration
+          <Badge variant={isConnected ? "default" : "secondary"}>
+            {isConnected ? 'Configured' : 'Not Configured'}
+          </Badge>
         </CardTitle>
       </CardHeader>
+
       <CardContent className="space-y-4">
         <Alert>
+          <Info className="h-4 w-4" />
           <AlertDescription>
-            <strong>Security Note:</strong> In production, database credentials should be handled by backend services.
-            This frontend configuration is for development purposes only.
+            <strong>Production Setup:</strong> Only database name and collection name are required. 
+            Connection details will be handled by your backend when deployed locally.
           </AlertDescription>
         </Alert>
 
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="connectionString">MongoDB Connection String</Label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="database-name">Database Name *</Label>
             <Input
-              id="connectionString"
-              type="password"
-              placeholder="mongodb+srv://username:password@cluster.mongodb.net/"
-              value={config.connectionString}
-              onChange={(e) => setConfig({ ...config, connectionString: e.target.value })}
-              className="mt-1"
+              id="database-name"
+              type="text"
+              placeholder="supplychain_ai"
+              value={databaseName}
+              onChange={(e) => setDatabaseName(e.target.value)}
+              required
             />
+            <p className="text-xs text-muted-foreground">
+              Name of your MongoDB database
+            </p>
           </div>
 
-          <div>
-            <Label htmlFor="databaseName">Database Name</Label>
+          <div className="space-y-2">
+            <Label htmlFor="collection-name">Collection Name *</Label>
             <Input
-              id="databaseName"
-              placeholder="supplychainai"
-              value={config.databaseName}
-              onChange={(e) => setConfig({ ...config, databaseName: e.target.value })}
-              className="mt-1"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="collectionName">Collection Name</Label>
-            <Input
-              id="collectionName"
+              id="collection-name"
+              type="text"
               placeholder="users"
-              value={config.collectionName}
-              onChange={(e) => setConfig({ ...config, collectionName: e.target.value })}
-              className="mt-1"
+              value={collectionName}
+              onChange={(e) => setCollectionName(e.target.value)}
+              required
             />
+            <p className="text-xs text-muted-foreground">
+              Collection where user data is stored
+            </p>
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button 
-            onClick={handleSave} 
-            className="flex items-center gap-2"
-            disabled={!config.connectionString || !config.databaseName}
+            onClick={handleSaveConfig} 
+            disabled={isLoading || !databaseName.trim() || !collectionName.trim()}
           >
-            <Save className="h-4 w-4" />
-            Save Configuration
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              'Save Configuration'
+            )}
           </Button>
           
           <Button 
-            onClick={handleTest} 
-            variant="outline"
-            className="flex items-center gap-2"
-            disabled={!config.connectionString || !config.databaseName || isLoading}
+            variant="outline" 
+            onClick={handleTestConnection}
+            disabled={isLoading || !dbConfig.isConfigured()}
           >
-            <TestTube className="h-4 w-4" />
-            {isLoading ? 'Testing...' : 'Test Connection'}
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Testing...
+              </>
+            ) : (
+              'Test Configuration'
+            )}
+          </Button>
+
+          <Button 
+            variant="destructive" 
+            onClick={handleClearConfig}
+            disabled={isLoading}
+          >
+            Clear Configuration
           </Button>
         </div>
 
-        {testResult && (
-          <Alert>
-            <AlertDescription>
-              {testResult}
-            </AlertDescription>
+        {error && (
+          <Alert variant="destructive">
+            <XCircle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
-        {isSaved && (
+        {connectionInfo && connectionInfo.success && (
           <Alert>
-            <AlertDescription className="text-green-600">
-              Configuration saved successfully!
-            </AlertDescription>
+            <CheckCircle className="h-4 w-4" />
+            <AlertDescription>{connectionInfo.message}</AlertDescription>
           </Alert>
+        )}
+
+        {dbConfig.isConfigured() && (
+          <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+            <div className="text-sm font-medium">Current Configuration:</div>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <div>• Database: <code className="bg-muted px-1 rounded">{dbConfig.getConfig()?.databaseName}</code></div>
+              <div>• Collection: <code className="bg-muted px-1 rounded">{dbConfig.getConfig()?.collectionName}</code></div>
+              <div>• Status: {isConnected ? '✅ Ready for production' : '⚠️ Not tested'}</div>
+            </div>
+          </div>
         )}
       </CardContent>
     </Card>

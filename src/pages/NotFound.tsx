@@ -1,26 +1,44 @@
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useRouteError } from "@/hooks/useRouteError";
+import RouteErrorModal from "@/components/RouteErrorModal";
 
 const NotFound = () => {
   const location = useLocation();
+  const { error, showPageNotFound, clearError, isOpen } = useRouteError();
 
   useEffect(() => {
     console.error(
       "404 Error: User attempted to access non-existent route:",
       location.pathname
     );
-  }, [location.pathname]);
+    
+    // Show error modal instead of basic 404 page
+    showPageNotFound();
+  }, [location.pathname, showPageNotFound]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
+    <>
+      {/* Fallback content - should not be visible due to modal */}
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <h1 className="text-4xl font-bold text-foreground">404</h1>
+          <p className="text-xl text-muted-foreground">Loading error details...</p>
+        </div>
       </div>
-    </div>
+
+      {/* Error Modal */}
+      {error && (
+        <RouteErrorModal
+          isOpen={isOpen}
+          title={error.title}
+          message={error.message}
+          suggestion={error.suggestion}
+          requestedPath={error.requestedPath}
+          onClose={clearError}
+        />
+      )}
+    </>
   );
 };
 

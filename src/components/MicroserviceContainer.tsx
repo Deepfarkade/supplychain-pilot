@@ -54,25 +54,22 @@ export const MicroserviceContainer: React.FC = () => {
   const componentKey = `${domain}/${slug}`;
   const Component = componentMap[componentKey];
 
-  // Handle microservice not found
+  // Handle microservice not found with enhanced error modal
   if (!microservice || !Component) {
+    // Import RouteErrorModal dynamically to avoid circular dependencies
+    const RouteErrorModal = React.lazy(() => import('@/components/RouteErrorModal'));
+    
     return (
-      <MicroserviceShell
-        title="Service Not Found"
-        description={`The microservice "${domain}/${slug}" is not available`}
-        layout={{ header: 'compact', padding: 'md' }}
-      >
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center space-y-4">
-            <p className="text-muted-foreground">
-              This microservice is not available or hasn't been implemented yet.
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Component key: {componentKey}
-            </p>
-          </div>
-        </div>
-      </MicroserviceShell>
+      <Suspense fallback={<MicroserviceShell title="Loading..." description="Loading error handler..." layout={{ header: 'compact', padding: 'md' }}><div className="p-8">Loading...</div></MicroserviceShell>}>
+        <RouteErrorModal
+          isOpen={true}
+          title="Service Unavailable"
+          message={`The microservice "${domain}/${slug}" is currently not available or has not been deployed yet.`}
+          suggestion="This service may be under development, disabled, or requires additional configuration."
+          requestedPath={`/app/${domain}/${slug}`}
+          onClose={() => navigate('/appstore', { replace: true })}
+        />
+      </Suspense>
     );
   }
 
