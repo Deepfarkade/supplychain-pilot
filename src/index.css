@@ -100,11 +100,11 @@
 }
 
 .card-elevated {
-  @apply surface-1 backdrop-blur-sm shadow-soft border border-border/40 transition-all duration-300 hover:shadow-elevated hover:border-border/60;
+  @apply surface-1 backdrop-blur-sm shadow-sm border border-border/40 transition-all duration-300 hover:shadow-lg hover:border-border/60;
 }
 
 .card-hover {
-  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-soft;
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-md;
 }
 
 .animate-fade-in {
@@ -161,17 +161,19 @@
   }
 }
 
-/* Utility Classes */
-.shadow-soft {
-  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.04), 0 1px 3px 0 rgba(0, 0, 0, 0.06);
-}
+/* Custom Utility Classes */
+@layer utilities {
+  .shadow-soft {
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.04), 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+  }
 
-.shadow-elevated {
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 2px 6px 0 rgba(0, 0, 0, 0.06);
-}
+  .shadow-elevated {
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 2px 6px 0 rgba(0, 0, 0, 0.06);
+  }
 
-.shadow-floating {
-  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.12), 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+  .shadow-floating {
+    box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.12), 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+  }
 }
 
 /* Scrollbar styling */
