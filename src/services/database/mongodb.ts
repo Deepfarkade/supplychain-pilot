@@ -67,41 +67,8 @@ class MongoDBService {
       // TEMPORARY: Simulate API call for development
       await new Promise(resolve => setTimeout(resolve, 800));
 
-      // TEMPORARY: Mock users for development - REMOVE IN PRODUCTION
-      const mockUsers: UserDocument[] = [
-        {
-          _id: '1',
-          email: 'admin@supplychainai.com',
-          password: 'admin123', // In production: hashed password
-          name: 'Admin User',
-          role: 'admin',
-          isActive: true,
-          createdAt: new Date('2024-01-01'),
-          lastLogin: new Date()
-        },
-        {
-          _id: '2', 
-          email: 'user@supplychainai.com',
-          password: 'user123', // In production: hashed password
-          name: 'Supply Chain User',
-          role: 'user',
-          isActive: true,
-          createdAt: new Date('2024-01-01'),
-          lastLogin: new Date()
-        }
-      ];
-
-      const user = mockUsers.find(u => u.email === email && u.password === password && u.isActive);
-      
-      if (user) {
-        console.log('✅ User authenticated successfully:', user.name);
-        // Remove password from returned user object
-        const { password: _, ...userWithoutPassword } = user;
-        return userWithoutPassword as UserDocument;
-      }
-
-      console.log('❌ Authentication failed for:', email);
-      return null;
+      // PRODUCTION: This would return the actual MongoDB response
+      throw new Error('MongoDB authentication not implemented - connect to your backend API');
     } catch (error) {
       console.error('❌ Authentication error:', error);
       throw error;

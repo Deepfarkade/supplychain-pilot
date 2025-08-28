@@ -5,10 +5,6 @@ import { jwtManager } from './jwt';
 import { sessionManager } from './session';
 
 class AuthService {
-  private readonly DUMMY_CREDENTIALS = [
-    { email: 'admin@supplychainai.com', password: 'admin123', name: 'Admin User', role: 'admin' },
-    { email: 'user@supplychainai.com', password: 'user123', name: 'Supply Chain User', role: 'user' }
-  ];
 
   // Authenticate user with backend API
   async authenticate(credentials: AuthCredentials): Promise<AuthResponse> {
@@ -37,14 +33,7 @@ class AuthService {
         console.log('⚠️ MongoDB authentication failed, using dummy credentials...');
       }
 
-      // Strategy 3: Fallback to dummy credentials (for testing)
-      const dummyResult = await this.authenticateWithDummy(credentials);
-      if (dummyResult.success) {
-        console.log('✅ Dummy authentication successful (TESTING MODE)');
-        return dummyResult;
-      }
-
-      return { success: false, message: 'Invalid credentials' };
+      return { success: false, message: 'Invalid credentials - Backend API and MongoDB authentication failed' };
     } catch (error) {
       console.error('Authentication error:', error);
       return { success: false, message: 'Authentication failed' };
@@ -135,32 +124,6 @@ class AuthService {
     throw new Error('Environment variables not available in Lovable');
   }
 
-  // Dummy credentials fallback
-  private async authenticateWithDummy(credentials: AuthCredentials): Promise<AuthResponse> {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    const validUser = this.DUMMY_CREDENTIALS.find(
-      cred => cred.email === credentials.email && cred.password === credentials.password
-    );
-
-    if (validUser) {
-      const user: User = {
-        id: validUser.email === 'admin@supplychainai.com' ? '1' : '2',
-        email: validUser.email,
-        name: validUser.name,
-        role: validUser.role,
-        createdAt: new Date().toISOString()
-      };
-
-      const token = jwtManager.generateToken(user);
-      jwtManager.storeToken(token, user);
-
-      return { success: true, user, token };
-    }
-
-    return { success: false, message: 'Invalid dummy credentials' };
-  }
 
   // Restore session from stored token
   async restoreSession(): Promise<{ user: User | null; isValid: boolean }> {
