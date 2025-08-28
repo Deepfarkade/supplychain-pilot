@@ -10,12 +10,23 @@ class AuthService {
     { email: 'user@supplychainai.com', password: 'user123', name: 'Supply Chain User', role: 'user' }
   ];
 
-  // Authenticate user with multiple fallback strategies
+  // Authenticate user with backend API
   async authenticate(credentials: AuthCredentials): Promise<AuthResponse> {
     try {
       console.log('🔐 Starting authentication process...');
       
-      // Strategy 1: Try MongoDB if configured
+      // Strategy 1: Try Backend API first
+      try {
+        const apiResult = await this.authenticateWithBackendAPI(credentials);
+        if (apiResult.success) {
+          console.log('✅ Backend API authentication successful');
+          return apiResult;
+        }
+      } catch (apiError) {
+        console.log('⚠️ Backend API authentication failed, trying MongoDB fallback...', apiError);
+      }
+
+      // Strategy 2: Try MongoDB if configured
       try {
         const mongoResult = await this.authenticateWithMongoDB(credentials);
         if (mongoResult.success) {
@@ -23,24 +34,13 @@ class AuthService {
           return mongoResult;
         }
       } catch (mongoError) {
-        console.log('⚠️ MongoDB authentication failed, trying fallback...');
+        console.log('⚠️ MongoDB authentication failed, using dummy credentials...');
       }
 
-      // Strategy 2: Try environment variables (when deployed to PC)
-      try {
-        const envResult = await this.authenticateWithEnv(credentials);
-        if (envResult.success) {
-          console.log('✅ Environment authentication successful');
-          return envResult;
-        }
-      } catch (envError) {
-        console.log('⚠️ Environment authentication failed, using dummy credentials...');
-      }
-
-      // Strategy 3: Fallback to dummy credentials
+      // Strategy 3: Fallback to dummy credentials (for testing)
       const dummyResult = await this.authenticateWithDummy(credentials);
       if (dummyResult.success) {
-        console.log('✅ Dummy authentication successful');
+        console.log('✅ Dummy authentication successful (TESTING MODE)');
         return dummyResult;
       }
 
@@ -48,6 +48,48 @@ class AuthService {
     } catch (error) {
       console.error('Authentication error:', error);
       return { success: false, message: 'Authentication failed' };
+    }
+  }
+
+  // Backend API authentication - THIS IS WHERE YOUR REAL API GETS CALLED
+  private async authenticateWithBackendAPI(credentials: AuthCredentials): Promise<AuthResponse> {
+    // Import API client and config
+    const { apiClient } = await import('@/services/api');
+    const { apiConfig } = await import('@/config/api');
+    
+    // Get current API configuration
+    const config = apiConfig.getConfig();
+    const endpoints = apiConfig.getEndpoints();
+    
+    console.log('🌐 Making API call to:', `${config.baseUrl}${endpoints.auth.login}`);
+    
+    try {
+      // Make actual HTTP request to your backend
+      const response: any = await apiClient.post(endpoints.auth.login, {
+        email: credentials.email,
+        password: credentials.password
+      });
+
+      // Handle successful response
+      if (response?.success || response?.user || response?.token) {
+        const user: User = {
+          id: response?.user?.id || response?.id || Date.now().toString(),
+          email: response?.user?.email || response?.email || credentials.email,
+          name: response?.user?.name || response?.name || 'User',
+          role: response?.user?.role || response?.role || 'user',
+          createdAt: new Date().toISOString()
+        };
+
+        const token = response?.token || jwtManager.generateToken(user);
+        jwtManager.storeToken(token, user);
+
+        return { success: true, user, token };
+      }
+      
+      return { success: false, message: response?.message || 'Authentication failed' };
+    } catch (error: any) {
+      console.error('Backend API authentication error:', error);
+      throw new Error(error.message || 'Backend API authentication failed');
     }
   }
 

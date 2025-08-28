@@ -128,21 +128,27 @@ class ApiConfigurationManager {
    * Get default base URL based on environment
    */
   private getDefaultBaseUrl(): string {
+    // Auto-detect environment and set appropriate base URL
     if (typeof window !== 'undefined') {
-      // Browser environment
-      const { protocol, hostname, port } = window.location;
+      const hostname = window.location.hostname;
+      const port = window.location.port;
       
-      // If running on localhost, use local backend
       if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        return `${protocol}//${hostname}:3001`; // Your backend port
+        // Local development - YOUR BACKEND API URL HERE
+        // If your backend runs on port 8080: 'http://localhost:8080'
+        // If your backend runs on port 5000: 'http://localhost:5000'
+        return 'http://localhost:8080'; // ⬅️ CHANGE THIS TO YOUR BACKEND PORT
+      } else if (hostname.includes('.lovable.app')) {
+        // Lovable staging
+        return 'https://your-staging-api.com'; // ⬅️ CHANGE THIS TO YOUR STAGING API
+      } else {
+        // Production
+        return 'https://your-production-api.com'; // ⬅️ CHANGE THIS TO YOUR PRODUCTION API
       }
-      
-      // Production or deployed environment
-      return `${protocol}//${hostname}${port ? `:${port}` : ''}`;
     }
     
-    // Default fallback
-    return 'http://localhost:3001';
+    // Fallback for server-side rendering
+    return 'http://localhost:8080';
   }
   
   /**

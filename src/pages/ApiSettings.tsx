@@ -192,13 +192,16 @@ export default function ApiSettings() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="baseUrl">Base URL</Label>
+                    <Label htmlFor="baseUrl">Backend API Base URL</Label>
                     <Input
                       id="baseUrl"
                       value={apiConfig.baseUrl}
                       onChange={(e) => handleApiConfigUpdate('baseUrl', e.target.value)}
-                      placeholder="http://localhost:3001"
+                      placeholder="http://localhost:8080 (or your backend port)"
                     />
+                    <p className="text-xs text-muted-foreground">
+                      <strong>Local:</strong> http://localhost:8080 | <strong>Production:</strong> https://api.yourbackend.com
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="timeout">Timeout (ms)</Label>
