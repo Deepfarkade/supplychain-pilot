@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
@@ -11,6 +11,9 @@ import os
 from dotenv import load_dotenv
 import logging
 from typing import Optional
+from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+from config.database import db_manager
+from config.security import security_manager
 
 # Load environment variables
 load_dotenv()
@@ -18,6 +21,11 @@ load_dotenv()
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Prometheus metrics
+REQUEST_COUNT = Counter('http_requests_total', 'Total HTTP requests', ['method', 'endpoint', 'status'])
+REQUEST_DURATION = Histogram('http_request_duration_seconds', 'HTTP request duration')
+LOGIN_ATTEMPTS = Counter('login_attempts_total', 'Total login attempts', ['status'])
 
 # FastAPI app
 app = FastAPI(
