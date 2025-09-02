@@ -1,23 +1,30 @@
-# Backend Setup Guide - Production Ready
+# Backend Setup Guide - Production Ready FastAPI
 
 ## Overview
-This application is designed to work with your own backend API that handles authentication and MongoDB operations. The frontend will make HTTP requests to your backend endpoints.
+This application includes a complete FastAPI backend with MongoDB authentication integration. The backend is designed to be production-ready and scalable.
 
-## Required Backend Configuration
+## Quick Setup
 
-### Environment Variables Your Backend Needs:
+### Step 1: Backend Setup
 ```bash
-# MongoDB Configuration
-MONGODB_URL=mongodb://localhost:27017  # Your MongoDB connection string
-DATABASE_NAME=supplychain_ai           # Your database name  
-COLLECTION_NAME=users                  # Your users collection name
+cd backend
+pip install -r requirements.txt
+```
 
-# JWT Configuration (optional - can use your own auth system)
-JWT_SECRET=your-super-secure-secret-key
-JWT_EXPIRES_IN=24h
+### Step 2: Configure Environment
+Edit `backend/.env` with your MongoDB credentials:
+```bash
+# MongoDB Configuration  
+MONGODB_URL=mongodb://your-mongodb-url
+DATABASE_NAME=n8n_Test
+COLLECTION_NAME=n8n_Users
 
-# API Configuration
-PORT=8080                              # Your backend port
+# JWT Configuration
+JWT_SECRET=your-super-secure-jwt-secret-key-change-this-in-production
+JWT_EXPIRES_IN_HOURS=24
+
+# Server Configuration
+PORT=8080
 ```
 
 ### Required Backend Endpoints:
@@ -64,19 +71,33 @@ Success Response:
 }
 ```
 
+### Step 3: Run Backend Server
+```bash
+cd backend
+python main.py
+```
+
 ### MongoDB User Document Structure
-Your users collection should have documents with this structure:
-```javascript
+Your users collection must have documents with this EXACT structure:
+```json
 {
-  "_id": ObjectId("..."),
-  "email": "user@example.com",
-  "password": "hashed_password",  // Should be hashed with bcrypt
-  "name": "User Name",
-  "role": "user",                 // or "admin"
-  "isActive": true,
-  "createdAt": ISODate("..."),
-  "updatedAt": ISODate("..."),
-  "lastLogin": ISODate("...")
+  "_id": {
+    "$oid": "68b06d75163d62bd3c511f13"
+  },
+  "email": "test@in.ey.com",
+  "password_hash": "$2b$12$Savk7wnEY1XWvdI3Uuh1juwnbyiavk/hXjmqCEeNn6exr5KySoH5i",
+  "name": "Deep Farkade",
+  "role": "admin",
+  "is_active": true,
+  "created_at": {
+    "$date": "2025-08-28T14:53:41.860Z"
+  },
+  "updated_at": {
+    "$date": "2025-08-28T14:53:41.860Z"
+  },
+  "last_login": {
+    "$date": "2025-08-28T17:13:50.091Z"
+  }
 }
 ```
 
@@ -97,159 +118,45 @@ If you want to display database configuration in the UI:
 3. Enter your **Collection Name** (e.g., `users`)
 4. Click **Save Configuration**
 
-## Backend Implementation Examples
+## FastAPI Backend Features
 
-### Node.js + Express + MongoDB Example:
-```javascript
-const express = require('express');
-const { MongoClient } = require('mongodb');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const cors = require('cors');
+### Production-Ready Features:
+- **FastAPI Framework**: High-performance async API
+- **MongoDB Integration**: Direct connection to your MongoDB instance
+- **JWT Authentication**: Secure token-based authentication
+- **CORS Support**: Configured for frontend integration
+- **Environment Configuration**: Secure .env file management
+- **Error Handling**: Comprehensive error handling and logging
+- **Health Checks**: Built-in health monitoring endpoints
+- **Token Refresh**: Automatic token refresh capability
+- **Production Ready**: Configured for deployment
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+### API Endpoints Available:
 
-// MongoDB connection
-const client = new MongoClient(process.env.MONGODB_URL);
-const db = client.db(process.env.DATABASE_NAME);
-const users = db.collection(process.env.COLLECTION_NAME);
+#### Authentication
+- `POST /api/auth/login` - User login with email/password
+- `POST /api/auth/test-connection` - Test MongoDB connection
+- `GET /api/auth/verify-token` - Verify JWT token validity
+- `GET /api/auth/refresh-token` - Refresh expired tokens
 
-// Login endpoint
-app.post('/api/auth/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    
-    // Find user in MongoDB
-    const user = await users.findOne({ email, isActive: true });
-    if (!user) {
-      return res.json({ success: false, message: 'Invalid credentials' });
-    }
-    
-    // Verify password
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) {
-      return res.json({ success: false, message: 'Invalid credentials' });
-    }
-    
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    );
-    
-    // Update last login
-    await users.updateOne(
-      { _id: user._id },
-      { $set: { lastLogin: new Date() } }
-    );
-    
-    // Return success response
-    res.json({
-      success: true,
-      user: {
-        id: user._id,
-        email: user.email,
-        name: user.name,
-        role: user.role
-      },
-      token
-    });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.json({ success: false, message: 'Authentication failed' });
-  }
-});
+#### System
+- `GET /health` - Health check endpoint
+- `GET /` - API information endpoint
 
-// Test connection endpoint
-app.post('/api/auth/test-connection', async (req, res) => {
-  try {
-    await client.db().admin().ping();
-    res.json({ success: true, message: 'Database connection successful' });
-  } catch (error) {
-    res.json({ success: false, message: 'Database connection failed' });
-  }
-});
+### Password Hashing
+The backend expects passwords to be hashed with bcrypt. Example Python script to hash passwords:
 
-app.listen(process.env.PORT || 8080, () => {
-  console.log(`Backend server running on port ${process.env.PORT || 8080}`);
-});
-```
-
-### Python + Flask + MongoDB Example:
 ```python
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from pymongo import MongoClient
-from werkzeug.security import check_password_hash
-import jwt
-import os
-from datetime import datetime, timedelta
+import bcrypt
 
-app = Flask(__name__)
-CORS(app)
+def hash_password(password: str) -> str:
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed.decode('utf-8')
 
-# MongoDB connection
-client = MongoClient(os.environ.get('MONGODB_URL'))
-db = client[os.environ.get('DATABASE_NAME')]
-users_collection = db[os.environ.get('COLLECTION_NAME')]
-
-@app.route('/api/auth/login', methods=['POST'])
-def login():
-    try:
-        data = request.get_json()
-        email = data.get('email')
-        password = data.get('password')
-        
-        # Find user in MongoDB
-        user = users_collection.find_one({'email': email, 'isActive': True})
-        if not user:
-            return jsonify({'success': False, 'message': 'Invalid credentials'})
-        
-        # Verify password
-        if not check_password_hash(user['password'], password):
-            return jsonify({'success': False, 'message': 'Invalid credentials'})
-        
-        # Generate JWT token
-        token = jwt.encode({
-            'id': str(user['_id']),
-            'email': user['email'],
-            'role': user.get('role', 'user'),
-            'exp': datetime.utcnow() + timedelta(hours=24)
-        }, os.environ.get('JWT_SECRET'), algorithm='HS256')
-        
-        # Update last login
-        users_collection.update_one(
-            {'_id': user['_id']},
-            {'$set': {'lastLogin': datetime.utcnow()}}
-        )
-        
-        return jsonify({
-            'success': True,
-            'user': {
-                'id': str(user['_id']),
-                'email': user['email'],
-                'name': user['name'],
-                'role': user.get('role', 'user')
-            },
-            'token': token
-        })
-    except Exception as e:
-        print(f'Login error: {e}')
-        return jsonify({'success': False, 'message': 'Authentication failed'})
-
-@app.route('/api/auth/test-connection', methods=['POST'])
-def test_connection():
-    try:
-        client.admin.command('ping')
-        return jsonify({'success': True, 'message': 'Database connection successful'})
-    except Exception as e:
-        return jsonify({'success': False, 'message': 'Database connection failed'})
-
-if __name__ == '__main__':
-    app.run(port=int(os.environ.get('PORT', 8080)))
+# Example usage
+password_hash = hash_password("your_password")
+print(password_hash)  # Use this in MongoDB
 ```
 
 ## Security Best Practices
