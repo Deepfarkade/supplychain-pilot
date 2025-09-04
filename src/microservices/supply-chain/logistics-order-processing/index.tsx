@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MicroserviceShell } from '@/components/MicroserviceShell';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,44 +7,74 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Truck, Search, Filter, ChevronDown, ExternalLink, Mail, AlertTriangle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Truck, Search, Filter, ChevronDown, ExternalLink, Mail, AlertTriangle, RefreshCw } from 'lucide-react';
+import { fetchOrders, type OrderData } from '@/services/googleSheets';
+import { useToast } from '@/hooks/use-toast';
 
 const LogisticsOrderProcessing: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('delivery_date');
   const [isExampleOpen, setIsExampleOpen] = useState(false);
+  const [orders, setOrders] = useState<OrderData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const breadcrumbs = [
     { label: 'Supply Chain' },
     { label: 'Logistics Order Processing' }
   ];
 
-  // Mock data - in real implementation, this would come from Google Sheets API
-  const mockOrders = [
-    {
-      po_number: 'PO45231',
-      expected_delivery_date: '2025-03-27',
-      sku_id: 'SKU-001-XYZ',
-      quantity: 500
-    },
-    {
-      po_number: 'PO45232',
-      expected_delivery_date: '2025-03-28',
-      sku_id: 'SKU-002-ABC',
-      quantity: 250
-    },
-    {
-      po_number: 'PO45233',
-      expected_delivery_date: '2025-03-29',
-      sku_id: 'SKU-003-DEF',
-      quantity: 750
-    }
-  ];
+  // Fetch data from Google Sheets on component mount
+  useEffect(() => {
+    loadOrders();
+  }, []);
 
-  const filteredOrders = mockOrders.filter(order => 
-    order.po_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.sku_id.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const loadOrders = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await fetchOrders();
+      setOrders(data);
+      toast({
+        title: "Data Updated",
+        description: `Loaded ${data.length} orders from Google Sheets`,
+      });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch orders';
+      setError(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Filter and sort orders
+  const filteredOrders = orders
+    .filter(order => 
+      order.po_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.sku_id.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'delivery_date':
+          return new Date(a.expected_delivery_date).getTime() - new Date(b.expected_delivery_date).getTime();
+        case 'po_number':
+          return a.po_number.localeCompare(b.po_number);
+        case 'quantity':
+          return b.quantity - a.quantity;
+        case 'sku_id':
+          return a.sku_id.localeCompare(b.sku_id);
+        default:
+          return 0;
+      }
+    });
 
   const googleSheetUrl = "https://docs.google.com/spreadsheets/d/1YusTkKbZESXfhF4XVV4_escOJZDWdicUoN7fsRqTj5A/edit?pli=1&gid=0#gid=0";
 
@@ -119,10 +149,29 @@ const LogisticsOrderProcessing: React.FC = () => {
           </CardContent>
         </Card>
 
+        {/* Error Alert */}
+        {error && (
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
         {/* Live Table Section */}
         <Card>
           <CardHeader>
-            <CardTitle>Live Order Table</CardTitle>
+            <CardTitle className="flex items-center justify-between">
+              Live Order Table
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={loadOrders}
+                disabled={loading}
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+            </CardTitle>
             <div className="flex gap-4 items-center">
               <div className="relative flex-1 max-w-sm">
                 <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
@@ -148,26 +197,47 @@ const LogisticsOrderProcessing: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>PO Number</TableHead>
-                  <TableHead>Expected Delivery Date</TableHead>
-                  <TableHead>SKU ID</TableHead>
-                  <TableHead>Quantity</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredOrders.map((order, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium">{order.po_number}</TableCell>
-                    <TableCell>{order.expected_delivery_date}</TableCell>
-                    <TableCell>{order.sku_id}</TableCell>
-                    <TableCell>{order.quantity.toLocaleString()}</TableCell>
-                  </TableRow>
+            {loading ? (
+              <div className="space-y-3">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="flex gap-4">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-4 w-28" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
                 ))}
-              </TableBody>
-            </Table>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>PO Number</TableHead>
+                    <TableHead>Expected Delivery Date</TableHead>
+                    <TableHead>SKU ID</TableHead>
+                    <TableHead>Quantity</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredOrders.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
+                        {orders.length === 0 ? 'No orders found' : 'No orders match your search criteria'}
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    filteredOrders.map((order, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{order.po_number}</TableCell>
+                        <TableCell>{order.expected_delivery_date}</TableCell>
+                        <TableCell>{order.sku_id}</TableCell>
+                        <TableCell>{order.quantity.toLocaleString()}</TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
 
@@ -227,10 +297,23 @@ const LogisticsOrderProcessing: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="flex gap-3 justify-end">
-          <Button variant="outline">
+          <Button variant="outline" onClick={loadOrders} disabled={loading}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh Data
           </Button>
-          <Button>
+          <Button onClick={() => {
+            const csvContent = [
+              ['PO Number', 'Expected Delivery Date', 'SKU ID', 'Quantity'],
+              ...filteredOrders.map(order => [order.po_number, order.expected_delivery_date, order.sku_id, order.quantity])
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `orders_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+          }}>
             Export Report
           </Button>
         </div>
