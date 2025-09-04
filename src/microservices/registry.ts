@@ -9,7 +9,7 @@
  */
 
 import { lazy } from 'react';
-import { MessageSquare, Bot, FileSearch, ShoppingCart, TrendingUp, Shield, Package, ClipboardList, FlaskConical, AlertTriangle, FileText } from 'lucide-react';
+import { MessageSquare, Bot, FileSearch, ShoppingCart, TrendingUp, Shield, Package, ClipboardList, Truck, FlaskConical, AlertTriangle, FileText } from 'lucide-react';
 import { MicroserviceConfig } from '@/types/microservice';
 
 // Image imports
@@ -194,6 +194,27 @@ export const microserviceRegistry: MicroserviceConfig[] = [
       title: 'Order Management Agent - Order Processing',
       description: 'AI-powered order processing and management with intelligent chat assistance',
       keywords: ['order management', 'order processing', 'ai assistant', 'order automation']
+    }
+  },
+  {
+    id: 'logistics-order-processing',
+    domain: 'supply-chain',
+    slug: 'logistics-order-processing',
+    name: 'Logistics Order Processing Agent',
+    path: '/app/supply-chain/logistics-order-processing',
+    description: 'An autonomous agent that monitors inbound orders, parses details, and seamlessly syncs them for operational visibility.',
+    icon: Truck,
+    category: 'Operations',
+    order: 6,
+    enabled: true,
+    development: true,
+    tags: ['logistics', 'orders', 'monitoring', 'autonomous'],
+    imageUrl: supplyChainNetworkImg,
+    element: () => import('@/microservices/supply-chain/logistics-order-processing/index'),
+    metadata: {
+      title: 'Logistics Order Processing Agent - Order Monitoring',
+      description: 'Autonomous agent for monitoring inbound orders and operational visibility',
+      keywords: ['logistics orders', 'order monitoring', 'autonomous agent', 'order processing']
     }
   },
 
