@@ -3,15 +3,10 @@ import { MicroserviceShell } from '@/components/MicroserviceShell';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Truck, Search, Filter, ChevronDown, ExternalLink, Mail, AlertTriangle } from 'lucide-react';
+import { Truck, ChevronDown, ExternalLink, Mail, AlertTriangle } from 'lucide-react';
 
 const LogisticsOrderProcessing: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('delivery_date');
   const [isExampleOpen, setIsExampleOpen] = useState(false);
 
   const breadcrumbs = [
@@ -19,32 +14,8 @@ const LogisticsOrderProcessing: React.FC = () => {
     { label: 'Logistics Order Processing' }
   ];
 
-  // Mock data - in real implementation, this would come from Google Sheets API
-  const mockOrders = [
-    {
-      po_number: 'PO45231',
-      expected_delivery_date: '2025-03-27',
-      sku_id: 'SKU-001-XYZ',
-      quantity: 500
-    },
-    {
-      po_number: 'PO45232',
-      expected_delivery_date: '2025-03-28',
-      sku_id: 'SKU-002-ABC',
-      quantity: 250
-    },
-    {
-      po_number: 'PO45233',
-      expected_delivery_date: '2025-03-29',
-      sku_id: 'SKU-003-DEF',
-      quantity: 750
-    }
-  ];
-
-  const filteredOrders = mockOrders.filter(order => 
-    order.po_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.sku_id.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Live data is displayed via the embedded Google Sheet below
+  // All filtering and searching is handled directly in the sheet
 
   const googleSheetUrl = "https://docs.google.com/spreadsheets/d/1YusTkKbZESXfhF4XVV4_escOJZDWdicUoN7fsRqTj5A/edit?pli=1&gid=0#gid=0";
 
@@ -116,58 +87,6 @@ const LogisticsOrderProcessing: React.FC = () => {
                 allow="fullscreen"
               />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Live Table Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Live Order Table</CardTitle>
-            <div className="flex gap-4 items-center">
-              <div className="relative flex-1 max-w-sm">
-                <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
-                <Input
-                  placeholder="Search PO numbers or SKUs..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9"
-                />
-              </div>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
-                  <Filter className="h-4 w-4 mr-2" />
-                  <SelectValue placeholder="Sort by..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="delivery_date">Delivery Date</SelectItem>
-                  <SelectItem value="po_number">PO Number</SelectItem>
-                  <SelectItem value="quantity">Quantity</SelectItem>
-                  <SelectItem value="sku_id">SKU ID</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>PO Number</TableHead>
-                  <TableHead>Expected Delivery Date</TableHead>
-                  <TableHead>SKU ID</TableHead>
-                  <TableHead>Quantity</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredOrders.map((order, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium">{order.po_number}</TableCell>
-                    <TableCell>{order.expected_delivery_date}</TableCell>
-                    <TableCell>{order.sku_id}</TableCell>
-                    <TableCell>{order.quantity.toLocaleString()}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
           </CardContent>
         </Card>
 
